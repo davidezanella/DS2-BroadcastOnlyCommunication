@@ -37,7 +37,7 @@ public class ProjectBuilder implements ContextBuilder<Object> {
 		String protocolVersion = params.getString("protocolVersion");
 		for (int i = 0; i < relayCount; i++) {
 			Relay relay;
-			if(protocolVersion.equals("PerfectConditions"))
+			if (protocolVersion.equals("PerfectConditions"))
 				relay = new RelayI(space, grid);
 			else {
 				System.err.println("Unsupported or not implemented protocol version!");

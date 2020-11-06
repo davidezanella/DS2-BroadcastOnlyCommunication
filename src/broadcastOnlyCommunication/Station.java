@@ -26,7 +26,11 @@ public class Station {
 	public void SendPerturbation() {
 		// get the grid location of the Station
 		GridPoint pt = grid.getLocation(this);
-		GridCellNgh<Relay> nghCreator = new GridCellNgh<Relay>(grid, pt, Relay.class, 50, 50);
+
+		// get all the Relays in the grid
+		Integer extentX = grid.getDimensions().getWidth() / 2;
+		Integer extentY = grid.getDimensions().getHeight() / 2;
+		GridCellNgh<Relay> nghCreator = new GridCellNgh<Relay>(grid, pt, Relay.class, extentX, extentY);
 		List<GridCell<Relay>> gridCells = nghCreator.getNeighborhood(true);
 
 		String value = UUID.randomUUID().toString();
