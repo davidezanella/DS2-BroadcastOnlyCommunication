@@ -7,16 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 import repast.simphony.engine.schedule.ScheduledMethod;
-import repast.simphony.essentials.RepastEssentials;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.grid.Grid;
-import repast.simphony.space.grid.GridPoint;
 import repast.simphony.util.collections.Pair;
 
-public class Relay {
-	private ContinuousSpace<Object> space;
-	private Grid<Object> grid;
-	private Map<String, Integer> frontier = new HashMap<String, Integer>();
+public abstract class Relay {
+	protected ContinuousSpace<Object> space;
+	protected Grid<Object> grid;
 	private List<Pair<Perturbation, Integer>> waitingList = new ArrayList<Pair<Perturbation, Integer>>();
 
 	public Relay(ContinuousSpace<Object> space, Grid<Object> grid) {
@@ -40,23 +37,12 @@ public class Relay {
 		        it.remove();
 				
 				Perturbation p = el.getFirst();
-				GridPoint pt = grid.getLocation(this);
-				Double tick = RepastEssentials.GetTickCount();
-				System.out.println(tick + " -- Relay " + pt.getX() + " - " + pt.getY() + ": " + p.val);
-				
-				if (!frontier.containsKey(p.src)) {
-					frontier.put(p.src, 0);
-				}
-
-				if (frontier.get(p.src).equals(p.ref)) {
-					ForwardPerturbation(p);
-					frontier.put(p.src, NextRef(p));
-					// observer notification of P.val goes here
-					
-				}
+				ProcessPerturbation(p);
 			}
 		}
 	}
+	
+	public abstract void ProcessPerturbation(Perturbation p);
 
 	public void ForwardPerturbation(Perturbation p) {
 		//TODO: forward the perturbation

@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <parameters>
-
-	<parameter name="randomSeed" displayName="Default Random Seed" type="int" defaultValue="__NULL__" />
-
+	<parameter name="randomSeed"
+		displayName="Default Random Seed" type="int" defaultValue="__NULL__"
+		isReadOnly="false"
+		converter="repast.simphony.parameter.StringConverterFactory$IntConverter" />
+	<parameter name="numStations"
+		displayName="Number of Stations" type="int" defaultValue="1"
+		isReadOnly="false"
+		converter="repast.simphony.parameter.StringConverterFactory$IntConverter" />
+	<parameter name="numRelays" displayName="Number of Relays"
+		type="int" defaultValue="3" isReadOnly="false"
+		converter="repast.simphony.parameter.StringConverterFactory$IntConverter" />
+	<parameter name="protocolVersion" displayName="Protocol version"
+		type="java.lang.String" defaultValue="PerfectConditions" isReadOnly="false"
+		converter="repast.simphony.parameter.StringConverterFactory$StringStringConverter"
+		values="PerfectConditions DynamicNetwork RecoveringLoss Point-to-Point GroupCommunication PrivacyPreserving" />
 </parameters>
+
+
