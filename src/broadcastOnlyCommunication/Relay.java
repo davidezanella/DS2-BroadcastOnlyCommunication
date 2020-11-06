@@ -1,9 +1,10 @@
 package broadcastOnlyCommunication;
 
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.PriorityBlockingQueue;
 
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.essentials.RepastEssentials;
@@ -16,8 +17,7 @@ public class Relay {
 	private ContinuousSpace<Object> space;
 	private Grid<Object> grid;
 	private Map<String, Integer> frontier = new HashMap<String, Integer>();
-	private PriorityBlockingQueue<Pair<Perturbation, Integer>> waitingQueue = new PriorityBlockingQueue<Pair<Perturbation, Integer>>(
-			10, new WaitingPerturbationComparator());
+	private List<Pair<Perturbation, Integer>> waitingList = new ArrayList<Pair<Perturbation, Integer>>();
 
 	public Relay(ContinuousSpace<Object> space, Grid<Object> grid) {
 		this.space = space;
@@ -25,17 +25,19 @@ public class Relay {
 	}
 
 	public void OnSense(Perturbation p, Integer missingTicks) {
-		this.waitingQueue.add(new Pair<Perturbation, Integer>(p, missingTicks));
+		this.waitingList.add(new Pair<Perturbation, Integer>(p, missingTicks));
 	}
 
 	@ScheduledMethod(start = 1, interval = 1)
 	public void ProcessPerturbations() {	
-		for (Pair<Perturbation, Integer> el : this.waitingQueue) {
+		for (Iterator<Pair<Perturbation, Integer>> it = this.waitingList.iterator(); it.hasNext(); ) {
+			Pair<Perturbation, Integer> el = it.next();
+			
 			// decrease the missing ticks 
 			el.setSecond(el.getSecond() - 1);
 			
 			if(el.getSecond().equals(0)) { // the perturbation is just arrived
-				this.waitingQueue.remove(el);
+		        it.remove();
 				
 				Perturbation p = el.getFirst();
 				GridPoint pt = grid.getLocation(this);
@@ -63,11 +65,5 @@ public class Relay {
 	public Integer NextRef(Perturbation p) {
 		return p.ref + 1; // for sequence numbers
 		// return hash(P) // for hash chaining
-	}
-
-	class WaitingPerturbationComparator implements Comparator<Pair<Perturbation, Integer>> {
-		public int compare(Pair<Perturbation, Integer> s1, Pair<Perturbation, Integer> s2) {
-			return s1.getSecond().compareTo(s2.getSecond());
-		}
 	}
 }
