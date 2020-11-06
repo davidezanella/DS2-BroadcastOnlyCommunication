@@ -29,7 +29,7 @@ public class ProjectBuilder implements ContextBuilder<Object> {
 		for (int i = 0; i < stationCount; i++) {
 			context.add(new Station(space, grid));
 		}
-		int relayCount = 100;
+		int relayCount = 3;
 		for (int i = 0; i < relayCount; i++) {
 			context.add(new Relay(space, grid));
 		}
