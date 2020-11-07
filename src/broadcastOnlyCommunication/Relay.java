@@ -16,36 +16,31 @@ import repast.simphony.util.collections.Pair;
 public abstract class Relay {
 	protected ContinuousSpace<Object> space;
 	protected Grid<Object> grid;
-	private List<Pair<Perturbation, Integer>> waitingList = new ArrayList<Pair<Perturbation, Integer>>();
+	private List<PendingPerturbation> pendingPerturbations = new ArrayList<>();
 
 	public Relay(ContinuousSpace<Object> space, Grid<Object> grid) {
 		this.space = space;
 		this.grid = grid;
 	}
 
-	public void onSense(Perturbation p, Integer missingTicks) {
-		this.waitingList.add(new Pair<Perturbation, Integer>(p, missingTicks));
+	public void onSense(Perturbation p, int missingTicks) {
+		this.pendingPerturbations.add(new PendingPerturbation(missingTicks, p));
 	}
 
 	@ScheduledMethod(start = 1, interval = 1)
 	public void processPerturbations() {
-		List<Perturbation> perturbationsToProcess = new ArrayList<>();
-		for (Iterator<Pair<Perturbation, Integer>> it = this.waitingList.iterator(); it.hasNext();) {
-			Pair<Perturbation, Integer> el = it.next();
+		var perturbationsToProcess = new ArrayList<Perturbation>();
+		for (var it = this.pendingPerturbations.iterator(); it.hasNext();) {
+			var pendingPerturbation = it.next();
 
-			// decrease the missing ticks
-			el.setSecond(el.getSecond() - 1);
+			pendingPerturbation.onTick();
 
-			if (el.getSecond().equals(0)) { // the perturbation is just arrived
+			if (pendingPerturbation.isTimeToProcess()) {
 				it.remove();
-
-				Perturbation p = el.getFirst();
-				perturbationsToProcess.add(p);
+				perturbationsToProcess.add(pendingPerturbation.perturbation);
 			}
 		}
-		for (var p : perturbationsToProcess) {
-			processPerturbation(p);
-		}
+		perturbationsToProcess.forEach(this::processPerturbation);
 	}
 
 	public abstract void processPerturbation(Perturbation p);
