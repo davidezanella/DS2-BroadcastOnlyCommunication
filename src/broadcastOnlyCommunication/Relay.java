@@ -29,6 +29,7 @@ public abstract class Relay {
 
 	@ScheduledMethod(start = 1, interval = 1)
 	public void processPerturbations() {
+		List<Perturbation> perturbationsToProcess = new ArrayList<>();
 		for (Iterator<Pair<Perturbation, Integer>> it = this.waitingList.iterator(); it.hasNext();) {
 			Pair<Perturbation, Integer> el = it.next();
 
@@ -39,8 +40,11 @@ public abstract class Relay {
 				it.remove();
 
 				Perturbation p = el.getFirst();
-				processPerturbation(p);
+				perturbationsToProcess.add(p);
 			}
+		}
+		for (var p : perturbationsToProcess) {
+			processPerturbation(p);
 		}
 	}
 
