@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import repast.simphony.engine.schedule.ScheduledMethod;
-import repast.simphony.query.space.grid.GridCell;
-import repast.simphony.query.space.grid.GridCellNgh;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
@@ -45,18 +43,12 @@ public abstract class Relay {
 	public void forwardPerturbation(Perturbation p) {
 		GridPoint pt = grid.getLocation(this);
 
-		// get all the Relays in the grid
-		int extentX = grid.getDimensions().getWidth() / 2;
-		int extentY = grid.getDimensions().getHeight() / 2;
-		GridCellNgh<Relay> nghCreator = new GridCellNgh<Relay>(grid, pt, Relay.class, extentX, extentY);
-		List<GridCell<Relay>> gridCells = nghCreator.getNeighborhood(true);
+		var relays = Utils.getAllRelaysInGrid(grid, pt);
 
-		for (GridCell<Relay> cell : gridCells) {
-			for (Relay relay : cell.items()) {
-				double distance = Utils.distanceBetweenPoints(pt, grid.getLocation(relay));
-				int missingTicks = (int) Math.ceil(distance);
-				relay.onSense(p, missingTicks);
-			}
+		for (var relay : relays) {
+			double distance = Utils.distanceBetweenPoints(pt, grid.getLocation(relay));
+			int missingTicks = (int) Math.ceil(distance);
+			relay.onSense(p, missingTicks);
 		}
 	}
 

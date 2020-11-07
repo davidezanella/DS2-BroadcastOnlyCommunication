@@ -5,8 +5,6 @@ import java.util.UUID;
 
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.essentials.RepastEssentials;
-import repast.simphony.query.space.grid.GridCell;
-import repast.simphony.query.space.grid.GridCellNgh;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.grid.Grid;
 
@@ -26,24 +24,19 @@ public class Station {
 		// get the grid location of the Station
 		var pt = grid.getLocation(this);
 
-		// get all the Relays in the grid
-		var extentX = grid.getDimensions().getWidth() / 2;
-		var extentY = grid.getDimensions().getHeight() / 2;
-		var nghCreator = new GridCellNgh<Relay>(grid, pt, Relay.class, extentX, extentY);
-		List<GridCell<Relay>> gridCells = nghCreator.getNeighborhood(true);
+		List<Relay> relays = Utils.getAllRelaysInGrid(grid, pt);
 
-		String value = UUID.randomUUID().toString();
-		Perturbation p = new Perturbation(this.ID, this.ref, value);
+		var value = UUID.randomUUID().toString();
+		var p = new Perturbation(this.ID, this.ref, value);
 		this.ref++;
 
 		Double tick = RepastEssentials.GetTickCount();
 		System.out.println(tick + " -- Station: " + pt.getX() + " - " + pt.getY() + ": " + value);
-		for (GridCell<Relay> cell : gridCells) {
-			for (Relay relay : cell.items()) {
-				Double distance = Utils.distanceBetweenPoints(pt, grid.getLocation(relay));
-				Integer missingTicks = (int) Math.ceil(distance);
-				relay.onSense(p, missingTicks);
-			}
+		for (var relay : relays) {
+			double distance = Utils.distanceBetweenPoints(pt, grid.getLocation(relay));
+			int missingTicks = (int) Math.ceil(distance);
+			relay.onSense(p, missingTicks);
 		}
 	}
+
 }
