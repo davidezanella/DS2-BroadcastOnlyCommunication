@@ -15,7 +15,7 @@ public class RelayI extends Relay {
 		super(space, grid);
 	}
 
-	public void ProcessPerturbation(Perturbation p) {
+	public void processPerturbation(Perturbation p) {
 		GridPoint pt = grid.getLocation(this);
 		Double tick = RepastEssentials.GetTickCount();
 		System.out.println(tick + " -- Relay " + pt.getX() + " - " + pt.getY() + ": " + p.val);
@@ -25,8 +25,8 @@ public class RelayI extends Relay {
 		}
 
 		if (frontier.get(p.src).equals(p.ref)) {
-			ForwardPerturbation(p);
-			frontier.put(p.src, NextRef(p));
+			forwardPerturbation(p);
+			frontier.put(p.src, nextRef(p));
 			// observer notification of P.val goes here
 
 		}

@@ -23,7 +23,7 @@ public class Station {
 	}
 
 	@ScheduledMethod(start = 1, interval = 100)
-	public void SendPerturbation() {
+	public void sendPerturbation() {
 		// get the grid location of the Station
 		GridPoint pt = grid.getLocation(this);
 
@@ -41,9 +41,9 @@ public class Station {
 		System.out.println(tick + " -- Station: " + pt.getX() + " - " + pt.getY() + ": " + value);
 		for (GridCell<Relay> cell : gridCells) {
 			for (Relay relay : cell.items()) {
-				Double distance = Utils.DistanceBetweenPoints(pt, grid.getLocation(relay));
+				Double distance = Utils.distanceBetweenPoints(pt, grid.getLocation(relay));
 				Integer missingTicks = (int) Math.ceil(distance);
-				relay.OnSense(p, missingTicks);
+				relay.onSense(p, missingTicks);
 			}
 		}
 	}
