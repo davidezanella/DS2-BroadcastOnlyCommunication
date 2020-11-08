@@ -11,7 +11,7 @@ import repast.simphony.space.grid.Grid;
 public class Station {
 	private ContinuousSpace<Object> space;
 	private Grid<Object> grid;
-	private String id = "station";
+	public final String id;
 	private int ref = 0;
 	
 	private Perturbation lastPerturbation; // used for logging purposes
