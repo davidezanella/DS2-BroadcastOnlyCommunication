@@ -35,7 +35,7 @@ public class Station {
 
 		for (var relay : relays) {
 			double distance = Utils.distanceBetweenPoints(pt, grid.getLocation(relay));
-			int missingTicks = (int) Math.ceil(distance);
+			int missingTicks = Utils.getNeededTimeToDeliver(distance);
 			relay.onSense(this.lastPerturbation, missingTicks);
 		}
 	}

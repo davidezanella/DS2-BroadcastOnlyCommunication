@@ -50,9 +50,11 @@ public abstract class Relay {
 		var relays = Utils.getAllRelaysInGrid(grid, pt);
 
 		for (var relay : relays) {
-			double distance = Utils.distanceBetweenPoints(pt, grid.getLocation(relay));
-			int missingTicks = (int) Math.ceil(distance);
-			relay.onSense(p, missingTicks);
+			if (!relay.equals(this)) {
+				double distance = Utils.distanceBetweenPoints(pt, grid.getLocation(relay));
+				int missingTicks = Utils.getNeededTimeToDeliver(distance);
+				relay.onSense(p, missingTicks);
+			}
 		}
 	}
 
@@ -60,19 +62,19 @@ public abstract class Relay {
 		return p.ref + 1; // for sequence numbers
 		// return hash(P) // for hash chaining
 	}
-	
+
 	public String getRelayId() {
 		return this.id;
 	}
-	
+
 	public String getArrivedPerturbations() {
 		var arrived = new ArrayList<String>();
-		for(var pert : processedPerturbations) {
+		for (var pert : processedPerturbations) {
 			arrived.add(pert.src + " " + pert.ref);
 		}
-		
+
 		processedPerturbations.clear();
-		
+
 		return String.join(", ", arrived);
 	}
 }
