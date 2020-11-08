@@ -39,9 +39,11 @@ public class ProjectBuilder implements ContextBuilder<Object> {
 		for (int i = 0; i < relayCount; i++) {
 			var id = "relay" + i;
 			Relay relay;
-			if (protocolVersion.equals("PerfectConditions"))
+			if (protocolVersion.equals("PerfectConditions")) {
 				relay = new RelayI(space, grid, id);
-			else {
+			} else if (protocolVersion.equals("RecoveringLoss")) {
+				relay = new RelayIII(space, grid, id);
+			}else {
 				System.err.println("Unsupported or not implemented protocol version!");
 				return null;
 			}
