@@ -56,7 +56,7 @@ public abstract class Relay {
 		}
 	}
 
-	public int nextRef(Perturbation p) {
+	public static int nextRef(Perturbation p) {
 		return p.ref + 1; // for sequence numbers
 		// return hash(P) // for hash chaining
 	}

@@ -28,7 +28,7 @@ public class RelayIII extends Relay {
 	}
 	
 	private void askForMissingPerturbationsFrom(Station src) {
-		int nextRef = 1;
+		int nextRef = expectedNextRefOf(src);
 		var arq = new Perturbation(src.id, nextRef, ARQ_VAL);
 		forwardPerturbation(arq);
 	}
@@ -62,7 +62,16 @@ public class RelayIII extends Relay {
 		return history.computeIfAbsent(src, k -> new ArrayList<>());
 	}
 	
+	private int expectedNextRefOf(Station s) {
+		var history = getHistoryOfStation(s.id);
+		return expectedNextRefOf(history);
+	}
+	
 	private static int expectedNextRefOf(List<Perturbation> history) {
-		return history.isEmpty() ? 0 : history.get(history.size() - 1).ref;
+		if (history.isEmpty()) {
+			return 0;
+		}
+		var lastPerturbation = history.get(history.size() - 1);
+		return nextRef(lastPerturbation);
 	}
 }
