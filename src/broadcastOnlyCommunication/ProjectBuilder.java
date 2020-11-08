@@ -31,14 +31,16 @@ public class ProjectBuilder implements ContextBuilder<Object> {
 
 		int stationCount = params.getInteger("numStations");
 		for (int i = 0; i < stationCount; i++) {
-			context.add(new Station(space, grid));
+			var id = "station" + i;
+			context.add(new Station(space, grid, id));
 		}
 		int relayCount = params.getInteger("numRelays");
 		String protocolVersion = params.getString("protocolVersion");
 		for (int i = 0; i < relayCount; i++) {
+			var id = "relay" + i;
 			Relay relay;
 			if (protocolVersion.equals("PerfectConditions"))
-				relay = new RelayI(space, grid);
+				relay = new RelayI(space, grid, id);
 			else {
 				System.err.println("Unsupported or not implemented protocol version!");
 				return null;

@@ -12,6 +12,6 @@
     <string>SettingsRegistryId</string>
     <string>Repast.registry</string>
     <string>LastLoadedScenario</string>
-    <string>C:\Users\david\eclipse-workspace\BroadcastOnlyCommunication\BroadcastOnlyCommunication.rs</string>
+    <string>/home/davide/UNI/DS2/DS2-BroadcastOnlyCommunication/BroadcastOnlyCommunication.rs</string>
   </hashtable>
 </simphony.settings.SettingsRegistry>
