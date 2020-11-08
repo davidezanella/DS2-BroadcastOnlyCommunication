@@ -51,14 +51,5 @@ public class RelayII extends Relay {
 				}
 			}
 		}	
-		
-		
-			
-		
-		forwardPerturbation(p);
-		frontier.put(p.src, nextRef(p));
-		// observer notification of P.val goes here
-
-		
 	}
 }
