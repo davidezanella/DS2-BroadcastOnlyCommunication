@@ -41,6 +41,8 @@ public class ProjectBuilder implements ContextBuilder<Object> {
 			Relay relay;
 			if (protocolVersion.equals("PerfectConditions")) {
 				relay = new RelayI(space, grid, id);
+			} else if (protocolVersion.equals("DynamicNetwork")) {
+				relay = new RelayII(space, grid, id);
 			} else if (protocolVersion.equals("RecoveringLoss")) {
 				relay = new RelayIII(space, grid, id);
 			}else {
