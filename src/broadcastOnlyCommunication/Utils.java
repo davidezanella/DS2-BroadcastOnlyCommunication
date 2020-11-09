@@ -14,24 +14,25 @@ public class Utils {
 		double yDiff = pt1.getY() - pt2.getY();
 		return Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
 	}
-	
+
+	public static int getNeededTimeToDeliver(double distance) {
+		return (int) Math.ceil(distance) ^ 2;
+	}
+
 	public static List<Relay> getAllRelaysInGrid(Grid<Object> grid, GridPoint pt) {
 		return getAllActorsInGrid(grid, pt, Relay.class);
 	}
-	
+
 	public static List<Station> getAllStationsInGrid(Grid<Object> grid, GridPoint pt) {
 		return getAllActorsInGrid(grid, pt, Station.class);
 	}
-	
+
 	public static <T> List<T> getAllActorsInGrid(Grid<Object> grid, GridPoint pt, Class<T> clazz) {
 		var extentX = grid.getDimensions().getWidth() / 2;
 		var extentY = grid.getDimensions().getHeight() / 2;
 		var nghCreator = new GridCellNgh<T>(grid, pt, clazz, extentX, extentY);
-		return nghCreator
-				.getNeighborhood(true)
-				.stream()
-				.flatMap(cell -> StreamSupport.stream(cell.items().spliterator(), false))
-				.collect(Collectors.toList());
+		return nghCreator.getNeighborhood(true).stream()
+				.flatMap(cell -> StreamSupport.stream(cell.items().spliterator(), false)).collect(Collectors.toList());
 	}
-	
+
 }
