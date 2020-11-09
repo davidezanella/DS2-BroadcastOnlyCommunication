@@ -55,11 +55,11 @@ public class ProjectBuilder implements ContextBuilder<Object> {
 			NdPoint pt = space.getLocation(obj);
 			grid.moveTo(obj, (int) pt.getX(), (int) pt.getY());
 		}
-		 
-		if(protocolVersion.equals("DynamicNetwork")) {
-			SimManager manager = new SimManager(space, grid, 10, 20, 2, 4);
-			context.add(manager);
-		}
+
+		// create a SimManager agent
+		SimManager manager = new SimManager(space, grid);
+		context.add(manager);
+		grid.moveTo(manager, 0, 0);
 
 		return context;
 	}
