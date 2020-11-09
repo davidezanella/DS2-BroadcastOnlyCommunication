@@ -8,13 +8,29 @@
 		displayName="Number of Stations" type="int" defaultValue="1"
 		isReadOnly="false"
 		converter="repast.simphony.parameter.StringConverterFactory$IntConverter" />
+	<parameter name="protocolVersion"
+		displayName="Protocol version" type="java.lang.String"
+		defaultValue="PerfectConditions" isReadOnly="false"
+		converter="repast.simphony.parameter.StringConverterFactory$StringStringConverter"
+		values="PerfectConditions DynamicNetwork RecoveringLoss Point-to-Point GroupCommunication PrivacyPreserving " />
 	<parameter name="numRelays" displayName="Number of Relays"
 		type="int" defaultValue="3" isReadOnly="false"
 		converter="repast.simphony.parameter.StringConverterFactory$IntConverter" />
-	<parameter name="protocolVersion" displayName="Protocol version"
-		type="java.lang.String" defaultValue="PerfectConditions" isReadOnly="false"
-		converter="repast.simphony.parameter.StringConverterFactory$StringStringConverter"
-		values="PerfectConditions DynamicNetwork RecoveringLoss Point-to-Point GroupCommunication PrivacyPreserving" />
+	<parameter name="probNew" displayName="New relay probability (0-100)"
+		type="int" defaultValue="0" isReadOnly="false"
+		converter="repast.simphony.parameter.StringConverterFactory$IntConverter" />
+	<parameter name="probCrash"
+		displayName="Relay crash probability (0-100)" type="int" defaultValue="0"
+		isReadOnly="false"
+		converter="repast.simphony.parameter.StringConverterFactory$IntConverter" />
+	<parameter name="minNumRelays"
+		displayName="Minimum number of relays" type="int" defaultValue="1"
+		isReadOnly="false"
+		converter="repast.simphony.parameter.StringConverterFactory$IntConverter" />
+	<parameter name="maxNumRelays"
+		displayName="Maximum number of relays" type="int" defaultValue="5"
+		isReadOnly="false"
+		converter="repast.simphony.parameter.StringConverterFactory$IntConverter" />
 </parameters>
 
 

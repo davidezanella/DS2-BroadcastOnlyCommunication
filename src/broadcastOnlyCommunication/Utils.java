@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import repast.simphony.engine.environment.RunEnvironment;
+import repast.simphony.parameter.Parameters;
 import repast.simphony.query.space.grid.GridCellNgh;
+import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
 
@@ -35,4 +38,19 @@ public class Utils {
 				.flatMap(cell -> StreamSupport.stream(cell.items().spliterator(), false)).collect(Collectors.toList());
 	}
 
+	public static Relay instantiateCorrectRelayVersion(ContinuousSpace<Object> space, Grid<Object> grid, String id) {
+		Parameters params = RunEnvironment.getInstance().getParameters();
+		String protocolVersion = params.getString("protocolVersion");
+
+		if (protocolVersion.equals("PerfectConditions")) {
+			return new RelayI(space, grid, id);
+		} else if (protocolVersion.equals("DynamicNetwork")) {
+			return new RelayII(space, grid, id);
+		} else if (protocolVersion.equals("RecoveringLoss")) {
+			return new RelayIII(space, grid, id);
+		} else {
+			System.err.println("Unsupported or not implemented protocol version!");
+			return null;
+		}
+	}
 }

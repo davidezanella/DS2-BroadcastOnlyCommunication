@@ -35,20 +35,9 @@ public class ProjectBuilder implements ContextBuilder<Object> {
 			context.add(new Station(space, grid, id));
 		}
 		int relayCount = params.getInteger("numRelays");
-		String protocolVersion = params.getString("protocolVersion");
 		for (int i = 0; i < relayCount; i++) {
 			var id = "relay" + i;
-			Relay relay;
-			if (protocolVersion.equals("PerfectConditions")) {
-				relay = new RelayI(space, grid, id);
-			} else if (protocolVersion.equals("DynamicNetwork")) {
-				relay = new RelayII(space, grid, id);
-			} else if (protocolVersion.equals("RecoveringLoss")) {
-				relay = new RelayIII(space, grid, id);
-			}else {
-				System.err.println("Unsupported or not implemented protocol version!");
-				return null;
-			}
+			Relay relay = Utils.instantiateCorrectRelayVersion(space, grid, id);			
 			context.add(relay);
 		}
 		for (Object obj : context) {
