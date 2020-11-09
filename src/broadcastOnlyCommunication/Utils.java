@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import repast.simphony.context.Context;
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.parameter.Parameters;
 import repast.simphony.query.space.grid.GridCellNgh;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
+import repast.simphony.util.ContextUtils;
 
 public class Utils {
 	public static double distanceBetweenPoints(GridPoint pt1, GridPoint pt2) {
@@ -52,5 +54,18 @@ public class Utils {
 			System.err.println("Unsupported or not implemented protocol version!");
 			return null;
 		}
+	}
+
+	public static Perturbation createNewPerturbation(ContinuousSpace<Object> space, Grid<Object> grid, String src,
+			int ref, String val, Object creator) {
+		// get the grid location of the creator
+		var pt = grid.getLocation(creator);
+
+		var p = new Perturbation(space, grid, src, ref, val);
+		Context<Object> context = ContextUtils.getContext(creator);
+		context.add(p);
+		grid.moveTo(p, (int) pt.getX(), (int) pt.getY());
+
+		return p;
 	}
 }

@@ -15,6 +15,7 @@ public class RelayI extends Relay {
 		super(space, grid, id);
 	}
 
+	@Override
 	public void processPerturbation(Perturbation p) {
 		if (!frontier.containsKey(p.src)) {
 			frontier.put(p.src, 0);

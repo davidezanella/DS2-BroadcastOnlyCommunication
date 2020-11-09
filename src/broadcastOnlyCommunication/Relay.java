@@ -11,7 +11,6 @@ import repast.simphony.space.grid.GridPoint;
 public abstract class Relay {
 	protected ContinuousSpace<Object> space;
 	protected Grid<Object> grid;
-	private List<PendingPerturbation> pendingPerturbations = new ArrayList<>();
 	private List<Perturbation> processedPerturbations = new ArrayList<>(); // used for log purposes
 	private String id;
 
@@ -21,41 +20,15 @@ public abstract class Relay {
 		this.id = id;
 	}
 
-	public void onSense(Perturbation p, int missingTicks) {
-		this.pendingPerturbations.add(new PendingPerturbation(missingTicks, p));
+	public void onSense(Perturbation p) {
+		this.processedPerturbations.add(p);
+		processPerturbation(p);
 	}
-
-	@ScheduledMethod(start = 1, interval = 1)
-	public void processPerturbations() {
-		var perturbationsToProcess = new ArrayList<Perturbation>();
-		for (var it = this.pendingPerturbations.iterator(); it.hasNext();) {
-			var pendingPerturbation = it.next();
-
-			pendingPerturbation.onTick();
-
-			if (pendingPerturbation.isTimeToProcess()) {
-				it.remove();
-				perturbationsToProcess.add(pendingPerturbation.perturbation);
-				processedPerturbations.add(pendingPerturbation.perturbation);
-			}
-		}
-		perturbationsToProcess.forEach(this::processPerturbation);
-	}
-
+	
 	public abstract void processPerturbation(Perturbation p);
 
 	public void forwardPerturbation(Perturbation p) {
-		GridPoint pt = grid.getLocation(this);
-
-		var relays = Utils.getAllRelaysInGrid(grid, pt);
-
-		for (var relay : relays) {
-			if (!relay.equals(this)) {
-				double distance = Utils.distanceBetweenPoints(pt, grid.getLocation(relay));
-				int missingTicks = Utils.getNeededTimeToDeliver(distance);
-				relay.onSense(p, missingTicks);
-			}
-		}
+		Utils.createNewPerturbation(space, grid, p.src, p.ref, p.val, this);
 	}
 
 	public static int nextRef(Perturbation p) {
