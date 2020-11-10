@@ -35,6 +35,7 @@ public class Perturbation {
 		increaseRadius();
 		deliverToRelaysInsideReachingRing();
 		ticks++;
+		removeItselfWhenBiggerThanGrid();
 	}
 
 	private void deliverToRelaysInsideReachingRing() {
@@ -57,6 +58,12 @@ public class Perturbation {
 			radius = 1;
 		} else {
 			radius += (1 / Math.pow(radius, 2));
+		}
+	}
+	
+	private void removeItselfWhenBiggerThanGrid() {
+		if (radius > Utils.getBiggestSizeOfGrid(grid)) {
+			Utils.removePerturbation(this);
 		}
 	}
 	

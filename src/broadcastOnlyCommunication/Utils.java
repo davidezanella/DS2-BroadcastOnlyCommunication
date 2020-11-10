@@ -70,4 +70,17 @@ public class Utils {
 
 		return p;
 	}
+	
+	public static void removePerturbation(Perturbation p) {
+		Context<Object> context = ContextUtils.getContext(p);
+		context.remove(p);
+		System.out.println("[UTILS] Perturbation removed: " + p);
+	}
+	
+	public static double getBiggestSizeOfGrid(Grid<Object> grid) {
+		
+		var dimensions = grid.getDimensions();
+		System.out.println(""+dimensions.getWidth());
+		return Math.max(dimensions.getWidth(), dimensions.getHeight());
+	}
 }
