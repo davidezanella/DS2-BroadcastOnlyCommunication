@@ -42,23 +42,29 @@ public class Perturbation {
 		// get the grid location of the Perturbation
 		var pt = grid.getLocation(this);
 
-		List<Relay> allRelays = Utils.getAllRelaysInGrid(grid, pt);
-		List<Relay> relays = allRelays.parallelStream().filter(k -> {
-			var dist = Utils.distanceBetweenPoints(pt, grid.getLocation(k));
-			return (radius - 1 <= dist) && (dist <= radius);
-		}).collect(Collectors.toList());
-
-		for (var relay : relays) {
-			relay.onSense(this);
-		}
+		Utils
+			.getAllRelaysInGrid(grid, pt)
+			.stream()
+			.filter(relay -> {
+				var dist = Utils.distanceBetweenPoints(pt, grid.getLocation(relay));
+				var ringRadiusStart = radius - getRadusIncrease();
+				var ringRadiusEnd = radius;
+				return dist >= ringRadiusStart && dist <= ringRadiusEnd;
+			})
+			.peek(relayInRange -> System.out.println("Deliverying perturbation to " + relayInRange))
+			.forEach(relayInRange -> relayInRange.onSense(Perturbation.this));
 	}
 	
 	private void increaseRadius() {
 		if (ticks <= 0) {
 			radius = 1;
 		} else {
-			radius += (1 / Math.pow(radius, 2));
+			radius += getRadusIncrease();
 		}
+	}
+	
+	private double getRadusIncrease() {
+		return (1 / Math.pow(radius, 2));
 	}
 	
 	private void removeItselfWhenBiggerThanGrid() {

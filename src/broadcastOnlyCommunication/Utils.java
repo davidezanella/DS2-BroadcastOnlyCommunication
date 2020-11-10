@@ -78,9 +78,7 @@ public class Utils {
 	}
 	
 	public static double getBiggestSizeOfGrid(Grid<Object> grid) {
-		
 		var dimensions = grid.getDimensions();
-		System.out.println(""+dimensions.getWidth());
 		return Math.max(dimensions.getWidth(), dimensions.getHeight());
 	}
 }
