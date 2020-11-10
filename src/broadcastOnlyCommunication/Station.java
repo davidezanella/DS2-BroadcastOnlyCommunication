@@ -1,6 +1,7 @@
 package broadcastOnlyCommunication;
 
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import repast.simphony.context.Context;
@@ -16,21 +17,35 @@ public class Station {
 	private Grid<Object> grid;
 	public final String id;
 	private int ref = 0;
+	protected Boolean canUnicast;
 
 	private Perturbation lastPerturbation; // used for logging purposes
 
-	public Station(ContinuousSpace<Object> space, Grid<Object> grid, String id) {
+	public Station(ContinuousSpace<Object> space, Grid<Object> grid, String id, Boolean cadUnicast) {
 		this.space = space;
 		this.grid = grid;
 		this.id = id;
+		this.canUnicast = canUnicast;
 	}
 
 	@ScheduledMethod(start = 1, interval = 100)
 	public void sendPerturbation() {
-		var value = UUID.randomUUID().toString();
-		this.lastPerturbation = Utils.createNewPerturbation(space, grid, id, ref, value, this);
-		
-		this.ref++;
+		//in p2p comm, all messages are unicast
+		if(canUnicast) {
+			Random r = new Random();
+			
+			var value = UUID.randomUUID().toString();
+			List<Relay> relays = Utils.getAllRelaysInGrid(grid, this);
+			Relay receiver = relays.remove(r.nextInt(relays.size()));
+			
+			this.lastPerturbation = Utils.createNewPerturbation(space, grid, id, ref, value, this, receiver.getId());
+			this.ref++;
+		} else {
+			var value = UUID.randomUUID().toString();
+			this.lastPerturbation = Utils.createNewPerturbation(space, grid, id, ref, value, this);
+			
+			this.ref++;
+		}
 	}
 
 	public String getNewPerturbationValue() {

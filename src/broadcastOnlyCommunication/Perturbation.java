@@ -16,6 +16,7 @@ public class Perturbation {
 	public final int ref;
 	public final String val;
 	private double radius;
+	public String receiverId;
 	
 	/**
 	 * number of ticks passed from its creation. Used for velocity and distance calculations
@@ -28,6 +29,15 @@ public class Perturbation {
 		this.senderId = src;
 		this.ref = ref;
 		this.val = val;
+	}
+	
+	public Perturbation(ContinuousSpace<Object> space, Grid<Object> grid, String src, int ref, String val, String receiverId) {
+		this.space = space;
+		this.grid = grid;
+		this.senderId = src;
+		this.ref = ref;
+		this.val = val;
+		this.receiverId = receiverId;
 	}
 
 	@ScheduledMethod(start = 1, interval = 1)
@@ -64,7 +74,7 @@ public class Perturbation {
 	}
 	
 	private double getRadusIncrease() {
-		return 0.5 + (1 / Math.pow(radius, 2));
+		return 0.05 + (1 / Math.pow(radius, 1.5));
 	}
 	
 	private void removeItselfWhenBiggerThanGrid() {
