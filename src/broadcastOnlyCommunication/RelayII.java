@@ -24,13 +24,13 @@ public class RelayII extends Relay {
 		Boolean noElementsToDeliver = false;
 		System.out.println(tick + " -- Relay " + pt.getX() + " - " + pt.getY() + ": " + p.val);
 
-		if (!frontier.containsKey(p.src)) {
-			frontier.put(p.src, 0);
+		if (!frontier.containsKey(p.senderId)) {
+			frontier.put(p.senderId, 0);
 		}
 
 		// if the perturbation has a ref number higher than expected, put it in the bag
 		// because it is getting an OOO delivery
-		if (p.ref >= frontier.get(p.src) && !bag.contains(p)) {
+		if (p.ref >= frontier.get(p.senderId) && !bag.contains(p)) {
 			// add the new perturbation to the bag, even if it can be forwarded immediately
 			bag.add(p);
 
@@ -42,9 +42,9 @@ public class RelayII extends Relay {
 					Perturbation bagPt = bag.get(i);
 
 					// an element can be forwarded
-					if (frontier.get(bagPt.src).equals(bagPt.ref)) {
+					if (frontier.get(bagPt.senderId).equals(bagPt.ref)) {
 						forwardPerturbation(bagPt);
-						frontier.put(bagPt.src, nextRef(bagPt));
+						frontier.put(bagPt.senderId, nextRef(bagPt));
 						bag.remove(bagPt);
 						// it could cause something else to be forwarded too
 						noElementsToDeliver = false;

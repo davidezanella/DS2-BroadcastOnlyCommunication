@@ -17,13 +17,13 @@ public class RelayI extends Relay {
 
 	@Override
 	public void processPerturbation(Perturbation p) {
-		if (!frontier.containsKey(p.src)) {
-			frontier.put(p.src, 0);
+		if (!frontier.containsKey(p.senderId)) {
+			frontier.put(p.senderId, 0);
 		}
 
-		if (frontier.get(p.src).equals(p.ref)) {
+		if (frontier.get(p.senderId).equals(p.ref)) {
 			forwardPerturbation(p);
-			frontier.put(p.src, nextRef(p));
+			frontier.put(p.senderId, nextRef(p));
 			// observer notification of P.val goes here
 
 		}

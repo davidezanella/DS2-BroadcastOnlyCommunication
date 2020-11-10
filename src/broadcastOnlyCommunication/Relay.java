@@ -28,7 +28,7 @@ public abstract class Relay {
 	public abstract void processPerturbation(Perturbation p);
 
 	public void forwardPerturbation(Perturbation p) {
-		Utils.createNewPerturbation(space, grid, p.src, p.ref, p.val, this);
+		Utils.createNewPerturbation(space, grid, p.senderId, p.ref, p.val, this);
 	}
 
 	public static int nextRef(Perturbation p) {
@@ -43,7 +43,7 @@ public abstract class Relay {
 	public String getArrivedPerturbations() {
 		var arrived = new ArrayList<String>();
 		for (var pert : processedPerturbations) {
-			arrived.add(pert.src + " " + pert.ref);
+			arrived.add(pert.senderId + " " + pert.ref);
 		}
 
 		processedPerturbations.clear();

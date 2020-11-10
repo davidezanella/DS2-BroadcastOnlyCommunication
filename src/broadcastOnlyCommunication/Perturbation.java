@@ -10,33 +10,28 @@ import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.grid.Grid;
 
 public class Perturbation {
-	private ContinuousSpace<Object> space;
-	private Grid<Object> grid;
-	public String src; // ID of the sender
-	public int ref;
-	public String val;
+	private final ContinuousSpace<Object> space;
+	private final Grid<Object> grid;
+	public final String senderId;
+	public final int ref;
+	public final String val;
 	private int ticks = 0; // number of ticks passed from its creation. Used for velocity and distance
 							// calculations
 
 	public Perturbation(ContinuousSpace<Object> space, Grid<Object> grid, String src, int ref, String val) {
 		this.space = space;
 		this.grid = grid;
-		this.src = src;
+		this.senderId = src;
 		this.ref = ref;
 		this.val = val;
-		
-		Schedule schedule = new Schedule();
-		ScheduleParameters params = ScheduleParameters.createRepeating(1, 1);
-		schedule.schedule(params, this, "deliverToRelays");
 	}
 
-	@ScheduledMethod(interval = 1)
+	@ScheduledMethod(start = 1, interval = 1)
 	public void deliverToRelays() {
 		// get the grid location of the Perturbation
 		var pt = grid.getLocation(this);
 
-		// the velocity decays so the radius depends on the passed ticks
-		var radius = (ticks > 0) ? 1 / Math.pow(ticks, 2) : 0;
+		var radius = getRadius();
 
 		List<Relay> allRelays = Utils.getAllRelaysInGrid(grid, pt);
 		List<Relay> relays = allRelays.parallelStream().filter(k -> {
@@ -49,5 +44,19 @@ public class Perturbation {
 		}
 
 		ticks++;
+	}
+	
+	public double getRadius() {
+		// the velocity decays so the radius depends on the passed ticks
+		return (ticks > 0) ? 1 / Math.pow(ticks, 2) : 0;
+	}
+	
+	/**
+	 * Even though the senderId is public, we need a getter method to use this field
+	 * inside a Dataset
+	 * @return
+	 */
+	public String getSenderId() {
+		return senderId;
 	}
 }

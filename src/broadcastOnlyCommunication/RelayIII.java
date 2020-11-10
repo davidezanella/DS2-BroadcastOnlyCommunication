@@ -42,15 +42,15 @@ public class RelayIII extends Relay {
 	}
 
 	private void processArqPerturbation(Perturbation arq) {
-		getHistoryOfStation(arq.src).stream().filter(p -> p.ref == arq.ref).findFirst()
+		getHistoryOfStation(arq.senderId).stream().filter(p -> p.ref == arq.ref).findFirst()
 				.ifPresent(this::forwardPerturbation);
 	}
 
 	private void processDataPerturbation(Perturbation p) {
-		var historyOfStation = getHistoryOfStation(p.src);
+		var historyOfStation = getHistoryOfStation(p.senderId);
 		if (p.ref == expectedNextRefOf(historyOfStation)) {
 			forwardPerturbation(p);
-			getHistoryOfStation(p.src).add(p);
+			getHistoryOfStation(p.senderId).add(p);
 		}
 	}
 
