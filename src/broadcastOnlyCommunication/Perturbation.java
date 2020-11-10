@@ -57,14 +57,18 @@ public class Perturbation {
 	
 	private void increaseRadius() {
 		if (ticks <= 0) {
-			radius = 1;
+			radius = 0.5;
 		} else {
 			radius += getRadusIncrease();
 		}
 	}
 	
 	private double getRadusIncrease() {
-		return 0.5 + (1 / Math.pow(radius, 2));
+		return 0.5 - sigmoid(ticks);
+	}
+	
+	private static double sigmoid(double x) {
+		return (1 / (1 + Math.pow(Math.E, -(x / 10)))) - 1;
 	}
 	
 	private void removeItselfWhenBiggerThanGrid() {
