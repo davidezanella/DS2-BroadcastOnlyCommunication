@@ -64,7 +64,7 @@ public class Perturbation {
 	}
 	
 	private double getRadusIncrease() {
-		return (1 / Math.pow(radius, 2));
+		return 0.5 + (1 / Math.pow(radius, 2));
 	}
 	
 	private void removeItselfWhenBiggerThanGrid() {

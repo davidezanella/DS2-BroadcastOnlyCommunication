@@ -50,4 +50,10 @@ public abstract class Relay {
 
 		return String.join(", ", arrived);
 	}
+
+	@Override
+	public String toString() {
+		return "Relay [id=" + id + "]";
+	}
+	
 }
