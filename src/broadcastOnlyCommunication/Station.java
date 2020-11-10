@@ -21,7 +21,7 @@ public class Station {
 
 	private Perturbation lastPerturbation; // used for logging purposes
 
-	public Station(ContinuousSpace<Object> space, Grid<Object> grid, String id, Boolean cadUnicast) {
+	public Station(ContinuousSpace<Object> space, Grid<Object> grid, String id, Boolean canUnicast) {
 		this.space = space;
 		this.grid = grid;
 		this.id = id;

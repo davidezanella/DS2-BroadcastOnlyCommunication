@@ -57,7 +57,7 @@ public class Perturbation {
 			.stream()
 			.filter(relay -> {
 				var dist = Utils.distanceBetweenPoints(pt, grid.getLocation(relay));
-				var ringRadiusStart = radius - getRadusIncrease();
+				var ringRadiusStart = radius - getRadiusIncrease();
 				var ringRadiusEnd = radius;
 				return dist >= ringRadiusStart && dist <= ringRadiusEnd;
 			})
@@ -69,11 +69,11 @@ public class Perturbation {
 		if (ticks <= 0) {
 			radius = 0.5;
 		} else {
-			radius += getRadusIncrease();
+			radius += getRadiusIncrease();
 		}
 	}
 	
-	private double getRadusIncrease() {
+	private double getRadiusIncrease() {
 		return 0.5 - sigmoid(ticks);
 	}
 	
