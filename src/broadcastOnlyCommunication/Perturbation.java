@@ -15,7 +15,7 @@ public class Perturbation {
 	public final String senderId;
 	public final int ref;
 	public final String val;
-	private double radius = 1;
+	private double radius;
 	
 	/**
 	 * number of ticks passed from its creation. Used for velocity and distance calculations
@@ -31,9 +31,13 @@ public class Perturbation {
 	}
 
 	@ScheduledMethod(start = 1, interval = 1)
-	public void deliverToRelays() {
+	public void onTick() {
 		increaseRadius();
-		
+		deliverToRelaysInsideReachingRing();
+		ticks++;
+	}
+
+	private void deliverToRelaysInsideReachingRing() {
 		// get the grid location of the Perturbation
 		var pt = grid.getLocation(this);
 
@@ -46,12 +50,12 @@ public class Perturbation {
 		for (var relay : relays) {
 			relay.onSense(this);
 		}
-
-		ticks++;
 	}
 	
 	private void increaseRadius() {
-		if (ticks > 0) {
+		if (ticks <= 0) {
+			radius = 1;
+		} else {
 			radius += (1 / Math.pow(radius, 2));
 		}
 	}
