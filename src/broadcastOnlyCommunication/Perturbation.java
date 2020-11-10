@@ -9,10 +9,6 @@ import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.grid.Grid;
 
-/**
- * @author simone
- *
- */
 public class Perturbation {
 	private final ContinuousSpace<Object> space;
 	private final Grid<Object> grid;
