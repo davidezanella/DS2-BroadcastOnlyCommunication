@@ -40,6 +40,17 @@ public class Utils {
 		return nghCreator.getNeighborhood(true).stream()
 				.flatMap(cell -> StreamSupport.stream(cell.items().spliterator(), false)).collect(Collectors.toList());
 	}
+	
+	public static Station instantiateCorrectStationVersion(ContinuousSpace<Object> space, Grid<Object> grid, String id) {
+		Parameters params = RunEnvironment.getInstance().getParameters();
+		String protocolVersion = params.getString("protocolVersion");
+		
+		if(protocolVersion.equals("Point-to-Point")) {
+			return new Station(space, grid, id, true);
+		} else {
+			return new Station(space, grid, id, false);
+		}
+	}
 
 	public static Relay instantiateCorrectRelayVersion(ContinuousSpace<Object> space, Grid<Object> grid, String id) {
 		Parameters params = RunEnvironment.getInstance().getParameters();
@@ -63,6 +74,21 @@ public class Utils {
 		var pt = grid.getLocation(creator);
 
 		var p = new Perturbation(space, grid, src, ref, val);
+		Context<Object> context = ContextUtils.getContext(creator);
+		context.add(p);
+		grid.moveTo(p, (int) pt.getX(), (int) pt.getY());
+		
+		System.out.println("[UTILS] New perturbation: " + p);
+
+		return p;
+	}
+	
+	public static Perturbation createNewPerturbation(ContinuousSpace<Object> space, Grid<Object> grid, String src,
+			int ref, String val, Object creator, String receiver) {
+		// get the grid location of the creator
+		var pt = grid.getLocation(creator);
+
+		var p = new Perturbation(space, grid, src, ref, val, receiver);
 		Context<Object> context = ContextUtils.getContext(creator);
 		context.add(p);
 		grid.moveTo(p, (int) pt.getX(), (int) pt.getY());

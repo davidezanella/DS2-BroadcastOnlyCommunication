@@ -56,4 +56,8 @@ public abstract class Relay {
 		return "Relay [id=" + id + "]";
 	}
 	
+	public String getId() {
+		return id;
+	}
+	
 }

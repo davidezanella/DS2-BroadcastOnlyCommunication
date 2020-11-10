@@ -4,3 +4,5 @@
 *.class
 
 Repast.settings
+
+output/

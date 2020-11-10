@@ -32,7 +32,8 @@ public class ProjectBuilder implements ContextBuilder<Object> {
 		int stationCount = params.getInteger("numStations");
 		for (int i = 0; i < stationCount; i++) {
 			var id = "station" + i;
-			context.add(new Station(space, grid, id));
+			Station station = Utils.instantiateCorrectStationVersion(space, grid, id);
+			context.add(station);
 		}
 		int relayCount = params.getInteger("numRelays");
 		for (int i = 0; i < relayCount; i++) {
