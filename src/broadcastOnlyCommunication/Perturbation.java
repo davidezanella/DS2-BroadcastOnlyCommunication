@@ -15,7 +15,7 @@ public class Perturbation {
 	public final String senderId;
 	public final int ref;
 	public final String val;
-	private double radius;
+	private double radius = 1;
 	
 	/**
 	 * number of ticks passed from its creation. Used for velocity and distance calculations
@@ -52,7 +52,7 @@ public class Perturbation {
 	
 	private void increaseRadius() {
 		if (ticks > 0) {
-			radius += (1 / Math.pow(ticks, 2));
+			radius += (1 / Math.pow(radius, 2));
 		}
 	}
 	
