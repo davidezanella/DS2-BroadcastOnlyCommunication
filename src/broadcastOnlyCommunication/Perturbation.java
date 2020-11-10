@@ -43,7 +43,7 @@ public class Perturbation {
 		var pt = grid.getLocation(this);
 
 		Utils
-			.getAllRelaysInGrid(grid, pt)
+			.getAllRelaysInGrid(grid, this)
 			.stream()
 			.filter(relay -> {
 				var dist = Utils.distanceBetweenPoints(pt, grid.getLocation(relay));

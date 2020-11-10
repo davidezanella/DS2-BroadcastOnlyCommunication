@@ -48,7 +48,7 @@ public class SimManager {
 
 		if (hasCrashed <= probCrash) {
 			// get all relays
-			List<Relay> relays = Utils.getAllRelaysInGrid(grid, grid.getLocation(this));
+			List<Relay> relays = Utils.getAllRelaysInGrid(grid, this);
 			if (relays.size() > 0 && relays.size() > minNum) {
 				Relay relayToCrash = relays.remove(r.nextInt(relays.size()));
 				System.out.println("Crashed a relay");
@@ -66,7 +66,7 @@ public class SimManager {
 
 		if (hasNew >= probNew) {
 			// get all relays
-			List<Relay> relays = Utils.getAllRelaysInGrid(grid, grid.getLocation(this));
+			List<Relay> relays = Utils.getAllRelaysInGrid(grid, this);
 			if (relays.size() < maxNum) {
 				var id = "relay" + nextRelayId;
 				nextRelayId++;
