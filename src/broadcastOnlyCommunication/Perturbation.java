@@ -9,14 +9,22 @@ import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.grid.Grid;
 
+/**
+ * @author simone
+ *
+ */
 public class Perturbation {
 	private final ContinuousSpace<Object> space;
 	private final Grid<Object> grid;
 	public final String senderId;
 	public final int ref;
 	public final String val;
-	private int ticks = 0; // number of ticks passed from its creation. Used for velocity and distance
-							// calculations
+	private double radius;
+	
+	/**
+	 * number of ticks passed from its creation. Used for velocity and distance calculations
+	 */
+	private int ticks = 0;
 
 	public Perturbation(ContinuousSpace<Object> space, Grid<Object> grid, String src, int ref, String val) {
 		this.space = space;
@@ -28,10 +36,10 @@ public class Perturbation {
 
 	@ScheduledMethod(start = 1, interval = 1)
 	public void deliverToRelays() {
+		increaseRadius();
+		
 		// get the grid location of the Perturbation
 		var pt = grid.getLocation(this);
-
-		var radius = getRadius();
 
 		List<Relay> allRelays = Utils.getAllRelaysInGrid(grid, pt);
 		List<Relay> relays = allRelays.parallelStream().filter(k -> {
@@ -46,9 +54,19 @@ public class Perturbation {
 		ticks++;
 	}
 	
+	private void increaseRadius() {
+		if (ticks > 0) {
+			radius += (1 / Math.pow(ticks, 2));
+		}
+	}
+	
+	/**
+	 * Even though the radius is public, we need a getter method to use this field
+	 * inside a Dataset
+	 * @return
+	 */
 	public double getRadius() {
-		// the velocity decays so the radius depends on the passed ticks
-		return (ticks > 0) ? 1 / Math.pow(ticks, 2) : 0;
+		return radius;
 	}
 	
 	/**
@@ -59,4 +77,10 @@ public class Perturbation {
 	public String getSenderId() {
 		return senderId;
 	}
+
+	@Override
+	public String toString() {
+		return "Perturbation [senderId=" + senderId + ", ref=" + ref + "]";
+	}
+	
 }
