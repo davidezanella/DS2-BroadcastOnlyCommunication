@@ -18,6 +18,7 @@ public class Station {
 	public final String id;
 	private int ref = 0;
 	protected Boolean canUnicast;
+	protected Boolean useCrypto;
 
 	private Perturbation lastPerturbation; // used for logging purposes
 
@@ -40,6 +41,9 @@ public class Station {
 			
 			this.lastPerturbation = Utils.createNewPerturbation(space, grid, id, ref, value, this, receiver.getId());
 			this.ref++;
+		} else if(canUnicast && useCrypto){
+			//use crypto to hide message
+			
 		} else {
 			var value = UUID.randomUUID().toString();
 			this.lastPerturbation = Utils.createNewPerturbation(space, grid, id, ref, value, this);

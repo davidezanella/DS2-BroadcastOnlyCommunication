@@ -51,6 +51,12 @@ public class RelayIII extends Relay {
 		if (p.ref == expectedNextRefOf(historyOfStation)) {
 			forwardPerturbation(p);
 			getHistoryOfStation(p.senderId).add(p);
+			/*
+			//if the message is unicast and is for me
+			if(p.receiverId == getId()) {
+				System.out.println("Received unicast msg from " + p.getSenderId() + " to " + getId() + " with value: " + p.val);
+			}*/
+				
 		}
 	}
 

@@ -60,7 +60,7 @@ public class Utils {
 			return new RelayI(space, grid, id);
 		} else if (protocolVersion.equals("DynamicNetwork")) {
 			return new RelayII(space, grid, id);
-		} else if (protocolVersion.equals("RecoveringLoss")) {
+		} else if (protocolVersion.equals("RecoveringLoss") || protocolVersion.equals("Point-to-Point")) {
 			return new RelayIII(space, grid, id);
 		} else {
 			System.err.println("Unsupported or not implemented protocol version!");

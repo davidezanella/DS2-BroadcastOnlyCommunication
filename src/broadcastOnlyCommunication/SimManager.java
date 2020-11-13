@@ -2,7 +2,9 @@ package broadcastOnlyCommunication;
 
 import repast.simphony.context.Context;
 import java.util.Random;
+import java.security.*;
 import java.util.List;
+import java.util.Map;
 
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.ScheduledMethod;
@@ -15,6 +17,7 @@ import repast.simphony.util.ContextUtils;
 public class SimManager {
 	private ContinuousSpace<Object> space;
 	private Grid<Object> grid;
+	protected Map<Object,KeyPair> keyRing;
 	/*
 	 * probability that the simulation manager destroy or creates a new relay,
 	 * respectively Value should be betwenn 1 and 100
@@ -38,6 +41,27 @@ public class SimManager {
 		this.maxNum = params.getInteger("maxNumRelays");
 		
 		this.nextRelayId = params.getInteger("numStations");
+		this.keyRing = new java.util.TreeMap<>();
+	}
+	
+	//for each station and relay, create a keypair
+	public void initializeCrypto() {
+		List<Relay> relays = Utils.getAllRelaysInGrid(grid, this);
+		List<Station> stations = Utils.getAllStationsInGrid(grid, this);
+		
+		for(int i=0; i<relays.size(); i++) {
+			try {
+				KeyPair keys = KeyPairGenerator.getInstance("RSA").generateKeyPair();
+				keyRing.put(relays.get(i), keys);
+			} catch (NoSuchAlgorithmException e) {}
+		}
+		
+		for(int i=0; i<stations.size(); i++) {
+			try {
+				KeyPair keys = KeyPairGenerator.getInstance("RSA").generateKeyPair();
+				keyRing.put(stations.get(i), keys);
+			} catch (NoSuchAlgorithmException e) {}
+		}
 	}
 
 	// make a random relay crash indefinitely with probability p
