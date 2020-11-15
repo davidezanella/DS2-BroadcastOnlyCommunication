@@ -1,10 +1,5 @@
 package broadcastOnlyCommunication;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import repast.simphony.engine.schedule.Schedule;
-import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.grid.Grid;
@@ -107,7 +102,7 @@ public class Perturbation {
 
 	@Override
 	public String toString() {
-		return "Perturbation [senderId=" + senderId + ", ref=" + ref + "]";
+		return "Perturbation [senderId=" + senderId + ", ref=" + ref + ", val=" + val + "]";
 	}
 	
 }

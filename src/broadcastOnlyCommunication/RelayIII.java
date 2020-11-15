@@ -1,9 +1,18 @@
 package broadcastOnlyCommunication;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.space.continuous.ContinuousSpace;
@@ -13,11 +22,14 @@ import repast.simphony.space.grid.GridPoint;
 public class RelayIII extends Relay {
 
 	public static final String ARQ_VAL = "!ARQ";
+	protected boolean useCrypto;
 
 	private final Map<String, List<Perturbation>> history = new HashMap<>();
 
-	public RelayIII(ContinuousSpace<Object> space, Grid<Object> grid, String id) {
+	public RelayIII(ContinuousSpace<Object> space, Grid<Object> grid, String id, boolean useCrypto) {
 		super(space, grid, id);
+
+		this.useCrypto = useCrypto;
 	}
 
 	@ScheduledMethod(start = 1, interval = 5)
@@ -50,12 +62,27 @@ public class RelayIII extends Relay {
 		if (p.ref == expectedNextRefOf(historyOfStation)) {
 			forwardPerturbation(p);
 			getHistoryOfStation(p.senderId).add(p);
-			/*
-			//if the message is unicast and is for me
-			if(p.receiverId == getId()) {
-				System.out.println("Received unicast msg from " + p.getSenderId() + " to " + getId() + " with value: " + p.val);
-			}*/
-				
+
+			// if the message is unicast and is for me
+			if (p.receiverId.equals(getId())) {
+				var value = p.val;
+				if (useCrypto) {
+					try {
+						var privKey = SimManager.keyRing.get(getRelayId()).getPrivate();
+						byte[] decode = Base64.getDecoder().decode(value);
+						Cipher rsa = Cipher.getInstance("RSA");
+				        rsa.init(Cipher.DECRYPT_MODE, privKey);
+				        byte[] utf8 = rsa.doFinal(decode);
+				        value = new String(utf8, "UTF8");
+					}
+					catch(Exception e) {
+						System.err.println("Error decrypting the message!");
+						e.printStackTrace();
+					}
+					System.out.println("Message decrypted correctly!");
+				}
+				System.out.println("Received unicast msg from " + p.getSenderId() + " to " + getId() + " with value: " + value);
+			}
 		}
 	}
 

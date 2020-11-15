@@ -50,6 +50,8 @@ public class ProjectBuilder implements ContextBuilder<Object> {
 		SimManager manager = new SimManager(space, grid);
 		context.add(manager);
 		grid.moveTo(manager, 0, 0);
+		
+		manager.initializeCrypto();
 
 		return context;
 	}

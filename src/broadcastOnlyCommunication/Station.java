@@ -1,8 +1,16 @@
 package broadcastOnlyCommunication;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import repast.simphony.context.Context;
 import repast.simphony.engine.schedule.ScheduledMethod;
@@ -22,34 +30,44 @@ public class Station {
 
 	private Perturbation lastPerturbation; // used for logging purposes
 
-	public Station(ContinuousSpace<Object> space, Grid<Object> grid, String id, Boolean canUnicast) {
+	public Station(ContinuousSpace<Object> space, Grid<Object> grid, String id, Boolean canUnicast, Boolean useCrypto) {
 		this.space = space;
 		this.grid = grid;
 		this.id = id;
 		this.canUnicast = canUnicast;
+		this.useCrypto = useCrypto;
 	}
 
 	@ScheduledMethod(start = 1, interval = 100)
 	public void sendPerturbation() {
-		//in p2p comm, all messages are unicast
-		if(canUnicast) {
+		var value = UUID.randomUUID().toString();
+		
+		// in p2p comm, all messages are unicast
+		if (canUnicast) {
 			Random r = new Random();
-			
-			var value = UUID.randomUUID().toString();
+
 			List<Relay> relays = Utils.getAllRelaysInGrid(grid, this);
 			Relay receiver = relays.remove(r.nextInt(relays.size()));
-			
+
+			if (useCrypto) {
+				// use crypto to hide message
+				try {
+					var pubKey = SimManager.keyRing.get(receiver.getRelayId()).getPublic();
+					Cipher rsa = Cipher.getInstance("RSA");
+					rsa.init(Cipher.ENCRYPT_MODE, pubKey);
+					byte[] bytesEncr = rsa.doFinal(value.getBytes());
+					value = Base64.getEncoder().encodeToString(bytesEncr);
+				}
+				catch(Exception e) {
+					System.err.println("Error encrypting the message!");
+					e.printStackTrace();
+				}
+			}
 			this.lastPerturbation = Utils.createNewPerturbation(space, grid, id, ref, value, this, receiver.getId());
-			this.ref++;
-		} else if(canUnicast && useCrypto){
-			//use crypto to hide message
-			
 		} else {
-			var value = UUID.randomUUID().toString();
 			this.lastPerturbation = Utils.createNewPerturbation(space, grid, id, ref, value, this);
-			
-			this.ref++;
 		}
+		this.ref++;
 	}
 
 	public String getNewPerturbationValue() {

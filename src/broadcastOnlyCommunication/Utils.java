@@ -46,9 +46,13 @@ public class Utils {
 		String protocolVersion = params.getString("protocolVersion");
 		
 		if(protocolVersion.equals("Point-to-Point")) {
-			return new Station(space, grid, id, true);
-		} else {
-			return new Station(space, grid, id, false);
+			return new Station(space, grid, id, true, false);
+		}
+		else if(protocolVersion.equals("PrivacyPreserving")) {
+			return new Station(space, grid, id, true, true);
+		}
+		else {
+			return new Station(space, grid, id, false, false);
 		}
 	}
 
@@ -61,7 +65,9 @@ public class Utils {
 		} else if (protocolVersion.equals("DynamicNetwork")) {
 			return new RelayII(space, grid, id);
 		} else if (protocolVersion.equals("RecoveringLoss") || protocolVersion.equals("Point-to-Point")) {
-			return new RelayIII(space, grid, id);
+			return new RelayIII(space, grid, id, false);
+		} else if (protocolVersion.equals("PrivacyPreserving")) {
+			return new RelayIII(space, grid, id, true);
 		} else {
 			System.err.println("Unsupported or not implemented protocol version!");
 			return null;
