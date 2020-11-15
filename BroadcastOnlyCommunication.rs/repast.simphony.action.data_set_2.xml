@@ -1,7 +1,7 @@
 <repast.simphony.data2.engine.DataSetDescriptor simphonyVersion="2.8.0">
-  <name>Perturbation Dataset</name>
+  <name>Relay Dataset</name>
   <type>NON_AGGREGATE</type>
-  <sourceType>broadcastOnlyCommunication.Perturbation</sourceType>
+  <sourceType>broadcastOnlyCommunication.Relay</sourceType>
   <inclTick>true</inclTick>
   <inclBatchRun>false</inclBatchRun>
   <inclRandomSeed>false</inclRandomSeed>
@@ -12,24 +12,24 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>966569724</hashCode>
+    <hashCode>844025713</hashCode>
   </scheduleParams>
-  <atEnd>false</atEnd>
+  <atEnd>true</atEnd>
   <methodDataSources class="linked-hash-map">
     <entry>
-      <string>Radius</string>
+      <string>RelayId</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>Radius</id>
-        <className>broadcastOnlyCommunication.Perturbation</className>
-        <methodName>getRadius</methodName>
+        <id>RelayId</id>
+        <className>broadcastOnlyCommunication.Relay</className>
+        <methodName>getRelayId</methodName>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
     </entry>
     <entry>
-      <string>SenderId</string>
+      <string>ArrivedPerturbations</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>SenderId</id>
-        <className>broadcastOnlyCommunication.Perturbation</className>
-        <methodName>getSenderId</methodName>
+        <id>ArrivedPerturbations</id>
+        <className>broadcastOnlyCommunication.Relay</className>
+        <methodName>getArrivedPerturbations</methodName>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
     </entry>
   </methodDataSources>

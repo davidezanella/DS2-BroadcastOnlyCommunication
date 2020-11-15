@@ -1,24 +1,32 @@
 <repast.simphony.visualization.engine.CartesianDisplayDescriptor simphonyVersion="2.8.0">
-  <name>Space Display</name>
+  <name>Display with perturbations</name>
   <type>2D</type>
   <styles>
     <entry>
-      <string>broadcastOnlyCommunication.Station</string>
-      <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
+      <string>broadcastOnlyCommunication.Relay</string>
+      <string>broadcastOnlyCommunication.Styles.RelayStyle</string>
     </entry>
     <entry>
-      <string>broadcastOnlyCommunication.Relay</string>
-      <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
+      <string>broadcastOnlyCommunication.Station</string>
+      <string>broadcastOnlyCommunication.Styles.StationStyle</string>
+    </entry>
+    <entry>
+      <string>broadcastOnlyCommunication.Perturbation</string>
+      <string>broadcastOnlyCommunication.Styles.PerturbationStyle</string>
     </entry>
   </styles>
   <editedStyles>
     <entry>
-      <string>broadcastOnlyCommunication.Station</string>
-      <string>broadcastOnlyCommunication.Station.style_0.xml</string>
+      <string>broadcastOnlyCommunication.Relay</string>
+      <null/>
     </entry>
     <entry>
-      <string>broadcastOnlyCommunication.Relay</string>
-      <string>broadcastOnlyCommunication.Relay.style_0.xml</string>
+      <string>broadcastOnlyCommunication.Station</string>
+      <null/>
+    </entry>
+    <entry>
+      <string>broadcastOnlyCommunication.Perturbation</string>
+      <null/>
     </entry>
   </editedStyles>
   <netStyles/>
@@ -31,18 +39,22 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>-935561002</hashCode>
+    <hashCode>-2101269033</hashCode>
   </schedParams>
   <layoutClassName>foo.bar.baz</layoutClassName>
   <layoutProjection>space</layoutProjection>
   <layoutInterval>0</layoutInterval>
   <layerOrder>
     <entry>
+      <string>broadcastOnlyCommunication.Relay</string>
+      <int>2</int>
+    </entry>
+    <entry>
       <string>broadcastOnlyCommunication.Station</string>
       <int>1</int>
     </entry>
     <entry>
-      <string>broadcastOnlyCommunication.Relay</string>
+      <string>broadcastOnlyCommunication.Perturbation</string>
       <int>0</int>
     </entry>
   </layerOrder>

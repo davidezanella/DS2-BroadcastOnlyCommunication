@@ -10,7 +10,7 @@ public class Perturbation {
 	public final String senderId;
 	public final int ref;
 	public final String val;
-	private double radius;
+	private float radius;
 	public String receiverId;
 	
 	/**
@@ -62,7 +62,7 @@ public class Perturbation {
 	
 	private void increaseRadius() {
 		if (ticks <= 0) {
-			radius = 0.5;
+			radius = 0.5f;
 		} else {
 			radius += getRadiusIncrease();
 		}
@@ -87,7 +87,7 @@ public class Perturbation {
 	 * inside a Dataset
 	 * @return
 	 */
-	public double getRadius() {
+	public float getRadius() {
 		return radius;
 	}
 	

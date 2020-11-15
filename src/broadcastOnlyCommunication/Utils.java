@@ -83,7 +83,7 @@ public class Utils {
 		Context<Object> context = ContextUtils.getContext(creator);
 		context.add(p);
 		grid.moveTo(p, (int) pt.getX(), (int) pt.getY());
-		
+
 		System.out.println("[UTILS] New perturbation: " + p);
 
 		return p;

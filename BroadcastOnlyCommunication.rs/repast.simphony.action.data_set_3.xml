@@ -1,7 +1,7 @@
 <repast.simphony.data2.engine.DataSetDescriptor simphonyVersion="2.8.0">
-  <name>Station Dataset</name>
+  <name>Perturbation Dataset</name>
   <type>NON_AGGREGATE</type>
-  <sourceType>broadcastOnlyCommunication.Station</sourceType>
+  <sourceType>broadcastOnlyCommunication.Perturbation</sourceType>
   <inclTick>true</inclTick>
   <inclBatchRun>false</inclBatchRun>
   <inclRandomSeed>false</inclRandomSeed>
@@ -12,32 +12,24 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>948548626</hashCode>
+    <hashCode>966569724</hashCode>
   </scheduleParams>
-  <atEnd>true</atEnd>
+  <atEnd>false</atEnd>
   <methodDataSources class="linked-hash-map">
     <entry>
-      <string>StationId</string>
+      <string>Radius</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>StationId</id>
-        <className>broadcastOnlyCommunication.Station</className>
-        <methodName>getStationId</methodName>
+        <id>Radius</id>
+        <className>broadcastOnlyCommunication.Perturbation</className>
+        <methodName>getRadius</methodName>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
     </entry>
     <entry>
-      <string>CurrentRef</string>
+      <string>SenderId</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>CurrentRef</id>
-        <className>broadcastOnlyCommunication.Station</className>
-        <methodName>getCurrentRef</methodName>
-      </repast.simphony.data2.engine.MethodDataSourceDefinition>
-    </entry>
-    <entry>
-      <string>NewPerturbationValue</string>
-      <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>NewPerturbationValue</id>
-        <className>broadcastOnlyCommunication.Station</className>
-        <methodName>getNewPerturbationValue</methodName>
+        <id>SenderId</id>
+        <className>broadcastOnlyCommunication.Perturbation</className>
+        <methodName>getSenderId</methodName>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
     </entry>
   </methodDataSources>
