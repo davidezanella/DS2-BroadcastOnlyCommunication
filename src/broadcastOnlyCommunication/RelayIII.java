@@ -22,8 +22,7 @@ public class RelayIII extends Relay {
 
 	@ScheduledMethod(start = 1, interval = 5)
 	public void askForMissingPerturbations() {
-		GridPoint pt = grid.getLocation(this);
-		Utils.getAllStationsInGrid(grid, pt).forEach(this::askForMissingPerturbationsFrom);
+		Utils.getAllStationsInGrid(grid, this).forEach(this::askForMissingPerturbationsFrom);
 	}
 
 	private void askForMissingPerturbationsFrom(Station src) {
