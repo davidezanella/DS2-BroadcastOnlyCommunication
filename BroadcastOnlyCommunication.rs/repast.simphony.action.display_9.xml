@@ -1,5 +1,5 @@
 <repast.simphony.visualization.engine.CartesianDisplayDescriptor simphonyVersion="2.8.0">
-  <name>Display with perturbations</name>
+  <name>Display with Perturbations</name>
   <type>2D</type>
   <styles>
     <entry>
@@ -39,19 +39,19 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>-2101269033</hashCode>
+    <hashCode>2048435769</hashCode>
   </schedParams>
   <layoutClassName>foo.bar.baz</layoutClassName>
-  <layoutProjection>space</layoutProjection>
+  <layoutProjection>grid</layoutProjection>
   <layoutInterval>0</layoutInterval>
   <layerOrder>
     <entry>
-      <string>broadcastOnlyCommunication.Relay</string>
-      <int>2</int>
-    </entry>
-    <entry>
       <string>broadcastOnlyCommunication.Station</string>
       <int>1</int>
+    </entry>
+    <entry>
+      <string>broadcastOnlyCommunication.Relay</string>
+      <int>2</int>
     </entry>
     <entry>
       <string>broadcastOnlyCommunication.Perturbation</string>
@@ -64,11 +64,41 @@
       <attributes/>
       <type>continuous space</type>
     </repast.simphony.scenario.data.ProjectionData>
+    <repast.simphony.scenario.data.ProjectionData>
+      <id>grid</id>
+      <attributes/>
+      <type>grid</type>
+    </repast.simphony.scenario.data.ProjectionData>
   </projections>
   <visualizationProperties class="repast.simphony.visualization.UnitSizeLayoutProperties">
     <unitSize>15.0</unitSize>
   </visualizationProperties>
   <projectionDescriptors>
+    <entry>
+      <string>grid</string>
+      <repast.simphony.visualization.grid.GridProjectionDescriptor>
+        <proj reference="../../../../projections/repast.simphony.scenario.data.ProjectionData[2]"/>
+        <props>
+          <entry>
+            <string>repast.simphony.visualization.grid.GridDecorator</string>
+            <map>
+              <entry>
+                <string>COLOR</string>
+                <int>-16777216</int>
+              </entry>
+              <entry>
+                <string>UNIT_SIZE</string>
+                <float>15.0</float>
+              </entry>
+              <entry>
+                <string>SHOW</string>
+                <boolean>false</boolean>
+              </entry>
+            </map>
+          </entry>
+        </props>
+      </repast.simphony.visualization.grid.GridProjectionDescriptor>
+    </entry>
     <entry>
       <string>space</string>
       <repast.simphony.visualization.continuous.ContinuousProjectionDescriptor>
@@ -79,7 +109,7 @@
             <map>
               <entry>
                 <string>COLOR</string>
-                <int>-16777216</int>
+                <int>-1</int>
               </entry>
               <entry>
                 <string>UNIT_SIZE</string>
@@ -103,4 +133,4 @@
     <alpha>255</alpha>
   </backgroundColor>
   <valueLayers/>
-</repast.simphony.visualization.engine.CartesianDisplayDescriptor>
+</repast.simphony.visualization.engine.CartesianDisplayDescriptor> 
