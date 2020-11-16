@@ -57,7 +57,7 @@ public class RelayIII extends Relay {
 			getHistoryOfStation(p.senderId).add(p);
 
 			// if the message is unicast and is for me
-			if (p.receiverId.equals(getId())) {
+			if (p.receiverId != null && p.receiverId.equals(getId())) {
 				var value = p.val;
 				if (useCrypto) {
 					try {
