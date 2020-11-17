@@ -26,7 +26,7 @@ public abstract class Relay {
 	public abstract void processPerturbation(Perturbation p);
 
 	public void forwardPerturbation(Perturbation p) {
-		Utils.createNewPerturbation(space, grid, p.senderId, p.ref, p.val, this);
+		Utils.createNewPerturbation(grid, p.senderId, p.ref, p.val, this);
 	}
 
 	public static int nextRef(Perturbation p) {

@@ -28,7 +28,7 @@ public class RelayIII extends Relay {
 
 	private void askForMissingPerturbationsFrom(Station src) {
 		int nextRef = expectedNextRefOf(src);
-		var arq = new Perturbation(space, grid, src.id, nextRef, ARQ_VAL);
+		var arq = new Perturbation(grid, src.id, nextRef, ARQ_VAL);
 		forwardPerturbation(arq);
 	}
 

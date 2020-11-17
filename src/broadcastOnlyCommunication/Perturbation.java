@@ -1,11 +1,9 @@
 package broadcastOnlyCommunication;
 
 import repast.simphony.engine.schedule.ScheduledMethod;
-import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.grid.Grid;
 
 public class Perturbation {
-	private final ContinuousSpace<Object> space;
 	private final Grid<Object> grid;
 	public final String senderId;
 	public final int ref;
@@ -18,16 +16,14 @@ public class Perturbation {
 	 */
 	private int ticks = 0;
 
-	public Perturbation(ContinuousSpace<Object> space, Grid<Object> grid, String src, int ref, String val) {
-		this.space = space;
+	public Perturbation(Grid<Object> grid, String src, int ref, String val) {
 		this.grid = grid;
 		this.senderId = src;
 		this.ref = ref;
 		this.val = val;
 	}
 	
-	public Perturbation(ContinuousSpace<Object> space, Grid<Object> grid, String src, int ref, String val, String receiverId) {
-		this.space = space;
+	public Perturbation(Grid<Object> grid, String src, int ref, String val, String receiverId) {
 		this.grid = grid;
 		this.senderId = src;
 		this.ref = ref;

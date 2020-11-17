@@ -5,11 +5,9 @@ import java.util.Random;
 import java.util.UUID;
 
 import repast.simphony.engine.schedule.ScheduledMethod;
-import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.grid.Grid;
 
 public class Station {
-	private ContinuousSpace<Object> space;
 	private Grid<Object> grid;
 	public final String id;
 	private int ref = 0;
@@ -18,8 +16,7 @@ public class Station {
 
 	private Perturbation lastPerturbation; // used for logging purposes
 
-	public Station(ContinuousSpace<Object> space, Grid<Object> grid, String id, Boolean canUnicast, Boolean useCrypto) {
-		this.space = space;
+	public Station(Grid<Object> grid, String id, Boolean canUnicast, Boolean useCrypto) {
 		this.grid = grid;
 		this.id = id;
 		this.canUnicast = canUnicast;
@@ -48,9 +45,9 @@ public class Station {
 					e.printStackTrace();
 				}
 			}
-			this.lastPerturbation = Utils.createNewUnicastPerturbation(space, grid, id, ref, value, this, receiver.getId());
+			this.lastPerturbation = Utils.createNewUnicastPerturbation(grid, id, ref, value, this, receiver.getId());
 		} else {
-			this.lastPerturbation = Utils.createNewPerturbation(space, grid, id, ref, value, this);
+			this.lastPerturbation = Utils.createNewPerturbation(grid, id, ref, value, this);
 		}
 		this.ref++;
 	}

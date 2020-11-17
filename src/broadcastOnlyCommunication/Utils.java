@@ -46,13 +46,13 @@ public class Utils {
 		String protocolVersion = params.getString("protocolVersion");
 		
 		if(protocolVersion.equals("Point-to-Point")) {
-			return new Station(space, grid, id, true, false);
+			return new Station(grid, id, true, false);
 		}
 		else if(protocolVersion.equals("PrivacyPreserving")) {
-			return new Station(space, grid, id, true, true);
+			return new Station(grid, id, true, true);
 		}
 		else {
-			return new Station(space, grid, id, false, false);
+			return new Station(grid, id, false, false);
 		}
 	}
 
@@ -74,15 +74,15 @@ public class Utils {
 		}
 	}
 
-	public static Perturbation createNewPerturbation(ContinuousSpace<Object> space, Grid<Object> grid, String src,
+	public static Perturbation createNewPerturbation(Grid<Object> grid, String src,
 			int ref, String val, Object creator) {
-		var p = new Perturbation(space, grid, src, ref, val);
+		var p = new Perturbation(grid, src, ref, val);
 		return startPropagatingPerturbation(grid, creator, p);
 	}
 	
-	public static Perturbation createNewUnicastPerturbation(ContinuousSpace<Object> space, Grid<Object> grid, String src,
+	public static Perturbation createNewUnicastPerturbation(Grid<Object> grid, String src,
 			int ref, String val, Object creator, String receiver) {
-		var p = new Perturbation(space, grid, src, ref, val, receiver);
+		var p = new Perturbation(grid, src, ref, val, receiver);
 		return startPropagatingPerturbation(grid, creator, p);
 	}
 	
