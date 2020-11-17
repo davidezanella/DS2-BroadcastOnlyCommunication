@@ -1,11 +1,8 @@
 package broadcastOnlyCommunication;
 
-import java.util.Base64;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
-
-import javax.crypto.Cipher;
 
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.space.continuous.ContinuousSpace;
@@ -41,15 +38,12 @@ public class Station {
 			Relay receiver = relays.remove(r.nextInt(relays.size()));
 
 			if (useCrypto) {
-				// use crypto to hide message
 				try {
 					var pubKey = SimManager.keyRing.get(receiver.getRelayId()).getPublic();
-					Cipher rsa = Cipher.getInstance("RSA");
-					rsa.init(Cipher.ENCRYPT_MODE, pubKey);
-					byte[] bytesEncr = rsa.doFinal(value.getBytes());
-					value = Base64.getEncoder().encodeToString(bytesEncr);
+					value = CryptoUtils.encryptMessage(value, pubKey);
+					System.out.println("Message encrypted correctly!");
 				}
-				catch(Exception e) {
+				catch (Exception e) {
 					System.err.println("Error encrypting the message!");
 					e.printStackTrace();
 				}

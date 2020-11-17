@@ -99,6 +99,10 @@ public class Perturbation {
 	public String getSenderId() {
 		return senderId;
 	}
+	
+	public boolean isUnicastMessage() {
+		return receiverId != null;
+	}
 
 	@Override
 	public String toString() {

@@ -3,10 +3,8 @@ package broadcastOnlyCommunication;
 import java.util.HashMap;
 import java.util.Map;
 
-import repast.simphony.essentials.RepastEssentials;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.grid.Grid;
-import repast.simphony.space.grid.GridPoint;
 
 public class RelayI extends Relay {
 	private Map<String, Integer> frontier = new HashMap<String, Integer>();

@@ -84,7 +84,7 @@ public class Utils {
 		context.add(p);
 		grid.moveTo(p, (int) pt.getX(), (int) pt.getY());
 
-		System.out.println("[UTILS] New perturbation: " + p);
+		System.out.println("[UTILS] New perturbation: " + p + " at location " + pt);
 
 		return p;
 	}
@@ -99,7 +99,7 @@ public class Utils {
 		context.add(p);
 		grid.moveTo(p, (int) pt.getX(), (int) pt.getY());
 		
-		System.out.println("[UTILS] New perturbation: " + p);
+		System.out.println("[UTILS] New perturbation: " + p + " at location " + pt);
 
 		return p;
 	}
