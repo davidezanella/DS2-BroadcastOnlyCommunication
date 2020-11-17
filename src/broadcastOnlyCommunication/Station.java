@@ -48,7 +48,7 @@ public class Station {
 					e.printStackTrace();
 				}
 			}
-			this.lastPerturbation = Utils.createNewPerturbation(space, grid, id, ref, value, this, receiver.getId());
+			this.lastPerturbation = Utils.createNewUnicastPerturbation(space, grid, id, ref, value, this, receiver.getId());
 		} else {
 			this.lastPerturbation = Utils.createNewPerturbation(space, grid, id, ref, value, this);
 		}

@@ -76,31 +76,24 @@ public class Utils {
 
 	public static Perturbation createNewPerturbation(ContinuousSpace<Object> space, Grid<Object> grid, String src,
 			int ref, String val, Object creator) {
-		// get the grid location of the creator
-		var pt = grid.getLocation(creator);
-
 		var p = new Perturbation(space, grid, src, ref, val);
-		Context<Object> context = ContextUtils.getContext(creator);
-		context.add(p);
-		grid.moveTo(p, (int) pt.getX(), (int) pt.getY());
-
-		System.out.println("[UTILS] New perturbation: " + p + " at location " + pt);
-
-		return p;
+		return startPropagatingPerturbation(grid, creator, p);
 	}
 	
-	public static Perturbation createNewPerturbation(ContinuousSpace<Object> space, Grid<Object> grid, String src,
+	public static Perturbation createNewUnicastPerturbation(ContinuousSpace<Object> space, Grid<Object> grid, String src,
 			int ref, String val, Object creator, String receiver) {
-		// get the grid location of the creator
+		var p = new Perturbation(space, grid, src, ref, val, receiver);
+		return startPropagatingPerturbation(grid, creator, p);
+	}
+	
+	private static Perturbation startPropagatingPerturbation(Grid<Object> grid, Object creator, Perturbation p) {
 		var pt = grid.getLocation(creator);
 
-		var p = new Perturbation(space, grid, src, ref, val, receiver);
 		Context<Object> context = ContextUtils.getContext(creator);
 		context.add(p);
 		grid.moveTo(p, (int) pt.getX(), (int) pt.getY());
 		
 		System.out.println("[UTILS] New perturbation: " + p + " at location " + pt);
-
 		return p;
 	}
 	
