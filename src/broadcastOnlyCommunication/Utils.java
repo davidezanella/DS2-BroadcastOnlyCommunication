@@ -36,7 +36,7 @@ public class Utils {
 		var pt = grid.getLocation(actor);
 		var extentX = grid.getDimensions().getWidth() / 2;
 		var extentY = grid.getDimensions().getHeight() / 2;
-		var nghCreator = new GridCellNgh<T>(grid, pt, clazz, extentX, extentY);
+		var<T> nghCreator = new GridCellNgh<T>(grid, pt, clazz, extentX, extentY);
 		return nghCreator.getNeighborhood(true).stream()
 				.flatMap(cell -> StreamSupport.stream(cell.items().spliterator(), false)).collect(Collectors.toList());
 	}
@@ -89,7 +89,8 @@ public class Utils {
 	private static Perturbation startPropagatingPerturbation(Grid<Object> grid, Object creator, Perturbation p) {
 		var pt = grid.getLocation(creator);
 
-		Context<Object> context = ContextUtils.getContext(creator);
+		@SuppressWarnings("unchecked")
+		var context = (Context<Perturbation>) ContextUtils.getContext(creator);
 		context.add(p);
 		grid.moveTo(p, (int) pt.getX(), (int) pt.getY());
 		
@@ -98,7 +99,7 @@ public class Utils {
 	}
 	
 	public static void removePerturbation(Perturbation p) {
-		Context<Object> context = ContextUtils.getContext(p);
+		var context = ContextUtils.getContext(p);
 		context.remove(p);
 		System.out.println("[UTILS] Perturbation removed: " + p);
 	}

@@ -18,7 +18,7 @@ import repast.simphony.space.grid.WrapAroundBorders;
 
 public class ProjectBuilder implements ContextBuilder<Object> {
 	@Override
-	public Context build(Context<Object> context) {
+	public Context<Object> build(Context<Object> context) {
 		context.setId("BroadcastOnlyCommunication");
 		ContinuousSpaceFactory spaceFactory = ContinuousSpaceFactoryFinder.createContinuousSpaceFactory(null);
 		ContinuousSpace<Object> space = spaceFactory.createContinuousSpace("space", context,

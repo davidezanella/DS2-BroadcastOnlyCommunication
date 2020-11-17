@@ -1,12 +1,12 @@
 package broadcastOnlyCommunication;
 
-import repast.simphony.context.Context;
 import java.util.Random;
 import java.security.*;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import repast.simphony.context.Context;
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.parameter.Parameters;
@@ -80,7 +80,7 @@ public class SimManager {
 			if (relays.size() > 0 && relays.size() > minNum) {
 				Relay relayToCrash = relays.remove(r.nextInt(relays.size()));
 				System.out.println("Crashed a relay");
-				Context<Object> context = ContextUtils.getContext(relayToCrash);
+				var context = ContextUtils.getContext(relayToCrash);
 				context.remove(relayToCrash);
 			}
 		}
@@ -99,7 +99,8 @@ public class SimManager {
 				var id = "relay" + nextRelayId;
 				nextRelayId++;
 				Relay relay = Utils.instantiateCorrectRelayVersion(space, grid, id);
-				Context<Object> context = ContextUtils.getContext(this);
+				@SuppressWarnings("unchecked")
+				var context = (Context<Relay>) ContextUtils.getContext(this);
 				context.add(relay);
 				System.out.println("Created new " + id);
 
