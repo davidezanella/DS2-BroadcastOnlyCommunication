@@ -52,6 +52,9 @@ public class ProjectBuilder implements ContextBuilder<Object> {
 		grid.moveTo(manager, 0, 0);
 		
 		manager.initializeCrypto();
+		
+		int maxTicks = params.getInteger("stopAt");
+		RunEnvironment.getInstance().endAt(maxTicks);
 
 		return context;
 	}
