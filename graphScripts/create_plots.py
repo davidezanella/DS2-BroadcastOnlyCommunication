@@ -1,17 +1,27 @@
 import csv
+import sys
+import argparse
+
+def parse_arg(argv):
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--stations', type=str, help='Path to stations log file')
+    parser.add_argument('--relays', type=str, help='Path to relays log file')
+    return parser.parse_args(argv)
 
 
-station_filename = "../output/OutputStation.2020.Nov.09.13_36_10.txt"
-relay_filename = "../output/OutputRelay.2020.Nov.09.13_36_10.txt"
+args = parse_arg(sys.argv[1:])
 
-file_station = open(station_filename)
+file_station = open(str(args.stations))
 csv_station = csv.DictReader(file_station, delimiter=',')
 
-file_relay = open(relay_filename)
+file_relay = open(str(args.relays))
 csv_relay = csv.DictReader(file_relay, delimiter=',')
+
+row_count = 0
 
 stations = {}
 for row in csv_station:
+    row_count+=1
     station_id = row['StationId']
     if station_id not in stations.keys():
         stations[station_id] = []
@@ -22,8 +32,12 @@ for row in csv_station:
             'value': row['NewPerturbationValue']
         })
 
+print(row_count)
+row_count = 0
+
 relays = {}
 for row in csv_relay:
+    row_count+=1
     relay_id = row['RelayId']
     if relay_id not in relays.keys():
         relays[relay_id] = []
@@ -36,7 +50,8 @@ for row in csv_relay:
                 'station': splitted[0],
                 'ref': int(splitted[1])
             })
-    
+
+print(row_count)    
 
 tot = 0
 count = 0
