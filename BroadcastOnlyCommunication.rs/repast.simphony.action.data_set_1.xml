@@ -1,7 +1,7 @@
 <repast.simphony.data2.engine.DataSetDescriptor simphonyVersion="2.8.0">
-  <name>Station Dataset</name>
+  <name>Relay Dataset</name>
   <type>NON_AGGREGATE</type>
-  <sourceType>broadcastOnlyCommunication.Station</sourceType>
+  <sourceType>broadcastOnlyCommunication.Relay</sourceType>
   <inclTick>true</inclTick>
   <inclBatchRun>false</inclBatchRun>
   <inclRandomSeed>false</inclRandomSeed>
@@ -12,32 +12,24 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>948548626</hashCode>
+    <hashCode>844025713</hashCode>
   </scheduleParams>
   <atEnd>true</atEnd>
   <methodDataSources class="linked-hash-map">
     <entry>
-      <string>StationId</string>
+      <string>RelayId</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>StationId</id>
-        <className>broadcastOnlyCommunication.Station</className>
-        <methodName>getStationId</methodName>
+        <id>RelayId</id>
+        <className>broadcastOnlyCommunication.Relay</className>
+        <methodName>getRelayId</methodName>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
     </entry>
     <entry>
-      <string>CurrentRef</string>
+      <string>ArrivedPerturbations</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>CurrentRef</id>
-        <className>broadcastOnlyCommunication.Station</className>
-        <methodName>getCurrentRef</methodName>
-      </repast.simphony.data2.engine.MethodDataSourceDefinition>
-    </entry>
-    <entry>
-      <string>NewPerturbationValue</string>
-      <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>NewPerturbationValue</id>
-        <className>broadcastOnlyCommunication.Station</className>
-        <methodName>getNewPerturbationValue</methodName>
+        <id>ArrivedPerturbations</id>
+        <className>broadcastOnlyCommunication.Relay</className>
+        <methodName>getArrivedPerturbations</methodName>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
     </entry>
   </methodDataSources>

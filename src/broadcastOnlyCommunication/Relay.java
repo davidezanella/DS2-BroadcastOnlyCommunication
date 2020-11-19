@@ -3,6 +3,9 @@ package broadcastOnlyCommunication;
 import java.util.ArrayList;
 import java.util.List;
 
+import repast.simphony.engine.environment.RunEnvironment;
+import repast.simphony.engine.schedule.ScheduledMethod;
+import repast.simphony.parameter.Parameters;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.grid.Grid;
 
@@ -11,11 +14,24 @@ public abstract class Relay {
 	protected Grid<Object> grid;
 	private List<Perturbation> processedPerturbations = new ArrayList<>(); // used for log purposes
 	private String id;
+	/* List of the perturbations that we have to send */
+	protected List<Perturbation> perturbationsToSend = new ArrayList<>();
+	/* Bytes remaining to send for the current perturbation */
+	protected int missingBytes;
+	/* Connection configurations */
+	private int packetSize;
+	private int transmissionSpeed;
 
 	public Relay(ContinuousSpace<Object> space, Grid<Object> grid, String id) {
 		this.space = space;
 		this.grid = grid;
 		this.id = id;
+		
+		Parameters params = RunEnvironment.getInstance().getParameters();
+		this.packetSize = params.getInteger("packetSize");
+		this.transmissionSpeed = params.getInteger("transmissionSpeed");
+		
+		this.missingBytes = packetSize;
 	}
 
 	public void onSense(Perturbation p) {
@@ -26,7 +42,24 @@ public abstract class Relay {
 	public abstract void processPerturbation(Perturbation p);
 
 	public void forwardPerturbation(Perturbation p) {
-		Utils.createNewPerturbation(grid, p.senderId, p.ref, p.val, this);
+		perturbationsToSend.add(p);
+	}
+	
+	@ScheduledMethod(start = 1, interval = 1)
+	public void sendPerturbation() {
+		if(perturbationsToSend.size() > 0) {
+			if (missingBytes <= 0) {
+				// I've sent all the bytes of the perturbation				
+				var p = perturbationsToSend.remove(0);
+				Utils.createNewPerturbation(grid, p.senderId, p.ref, p.val, this);
+				
+				missingBytes = packetSize;
+			}
+			else {
+				// A sending of a perturbation is going on
+				missingBytes -= transmissionSpeed;
+			}
+		}
 	}
 
 	public static int nextRef(Perturbation p) {
