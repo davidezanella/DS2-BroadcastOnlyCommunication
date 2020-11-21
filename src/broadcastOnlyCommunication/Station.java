@@ -11,16 +11,24 @@ public class Station {
 	private Grid<Object> grid;
 	public final String id;
 	private int ref = 0;
-	protected Boolean canUnicast;
-	protected Boolean useCrypto;
+	protected final boolean useUnicast;
+	protected final boolean useCrypto;
+	protected final boolean useTopic;
 
 	private Perturbation lastPerturbation; // used for logging purposes
 
-	public Station(Grid<Object> grid, String id, Boolean canUnicast, Boolean useCrypto) {
+	public Station(Grid<Object> grid, String id, boolean useUnicast, boolean useCrypto, boolean useTopic) {
 		this.grid = grid;
 		this.id = id;
-		this.canUnicast = canUnicast;
+		if (useCrypto && !useUnicast) {
+			throw new IllegalArgumentException("'useCrpyto' can be true only is 'useUnicast' is true");
+		}
+		if (useTopic && useUnicast) {
+			throw new IllegalArgumentException("'useTopic' and 'useUnicast' cannot be both true");
+		}
+		this.useUnicast = useUnicast;
 		this.useCrypto = useCrypto;
+		this.useTopic = useTopic;
 	}
 
 	@ScheduledMethod(start = 1, interval = 100)
@@ -28,7 +36,7 @@ public class Station {
 		var value = UUID.randomUUID().toString();
 		
 		// in p2p comm, all messages are unicast
-		if (canUnicast) {
+		if (useUnicast) {
 			Random r = new Random();
 
 			List<Relay> relays = Utils.getAllRelaysInGrid(grid, this);
@@ -46,6 +54,8 @@ public class Station {
 				}
 			}
 			this.lastPerturbation = Utils.createNewUnicastPerturbation(grid, id, ref, value, this, receiver.getId());
+		} else if (useTopic) {
+			this.lastPerturbation = Utils.createNewTopicPerturbation(grid, id, ref, value, this, "default");
 		} else {
 			this.lastPerturbation = Utils.createNewPerturbation(grid, id, ref, value, this);
 		}

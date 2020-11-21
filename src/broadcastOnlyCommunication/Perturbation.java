@@ -4,12 +4,14 @@ import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.space.grid.Grid;
 
 public class Perturbation {
+	
 	private final Grid<Object> grid;
 	public final String senderId;
 	public final int ref;
 	public final String val;
 	private float radius;
-	public String receiverId;
+	public final String receiverId;
+	private final String topic;
 	
 	/**
 	 * number of ticks passed from its creation. Used for velocity and distance calculations
@@ -21,14 +23,25 @@ public class Perturbation {
 		this.senderId = src;
 		this.ref = ref;
 		this.val = val;
+		this.receiverId = null;
+		this.topic = null;
 	}
 	
-	public Perturbation(Grid<Object> grid, String src, int ref, String val, String receiverId) {
+	public Perturbation(Grid<Object> grid, String senderId, int ref, String val, String receiverId, String topic) {
 		this.grid = grid;
-		this.senderId = src;
+		this.senderId = senderId;
 		this.ref = ref;
 		this.val = val;
+		this.topic = topic;
 		this.receiverId = receiverId;
+	}
+	
+	public static Perturbation createUnicastPerturbation(Grid<Object> grid, String src, int ref, String val, String receiverId) {
+		return new Perturbation(grid, src, ref, val, receiverId, null);
+	}
+	
+	public static Perturbation createTopicPerturbation(Grid<Object> grid, String src, int ref, String val, String topic) {
+		return new Perturbation(grid, src, ref, val, null, topic);
 	}
 
 	@ScheduledMethod(start = 1, interval = 1)
@@ -98,6 +111,17 @@ public class Perturbation {
 	
 	public boolean isUnicastMessage() {
 		return receiverId != null;
+	}
+	
+	public boolean isTopicMessage() {
+		return topic != null;
+	}
+	
+	public String getTopic() {
+		if (!isTopicMessage()) {
+			throw new IllegalStateException("Perturbation is not a Topic message");
+		}
+		return topic;
 	}
 
 	@Override

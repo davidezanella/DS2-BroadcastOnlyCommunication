@@ -46,13 +46,13 @@ public class Utils {
 		String protocolVersion = params.getString("protocolVersion");
 		
 		if(protocolVersion.equals("Point-to-Point")) {
-			return new Station(grid, id, true, false);
-		}
-		else if(protocolVersion.equals("PrivacyPreserving")) {
-			return new Station(grid, id, true, true);
-		}
-		else {
-			return new Station(grid, id, false, false);
+			return new Station(grid, id, true, false, false);
+		} else if(protocolVersion.equals("PrivacyPreserving")) {
+			return new Station(grid, id, true, true, false);
+		} else if(protocolVersion.equals("GroupCommunication")) {
+			return new Station(grid, id, false, false, true);
+		} else {
+			return new Station(grid, id, false, false, false);
 		}
 	}
 
@@ -64,7 +64,7 @@ public class Utils {
 			return new RelayI(space, grid, id);
 		} else if (protocolVersion.equals("DynamicNetwork")) {
 			return new RelayII(space, grid, id);
-		} else if (protocolVersion.equals("RecoveringLoss") || protocolVersion.equals("Point-to-Point")) {
+		} else if (protocolVersion.equals("RecoveringLoss") || protocolVersion.equals("Point-to-Point") || protocolVersion.equals("GroupCommunication")) {
 			return new RelayIII(space, grid, id, false);
 		} else if (protocolVersion.equals("PrivacyPreserving")) {
 			return new RelayIII(space, grid, id, true);
@@ -82,7 +82,13 @@ public class Utils {
 	
 	public static Perturbation createNewUnicastPerturbation(Grid<Object> grid, String src,
 			int ref, String val, Object creator, String receiver) {
-		var p = new Perturbation(grid, src, ref, val, receiver);
+		var p = Perturbation.createUnicastPerturbation(grid, src, ref, val, receiver);
+		return startPropagatingPerturbation(grid, creator, p);
+	}
+	
+	public static Perturbation createNewTopicPerturbation(Grid<Object> grid, String src,
+			int ref, String val, Object creator, String topic) {
+		var p = Perturbation.createTopicPerturbation(grid, src, ref, val, topic);
 		return startPropagatingPerturbation(grid, creator, p);
 	}
 	

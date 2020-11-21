@@ -2,23 +2,29 @@ package broadcastOnlyCommunication;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.grid.Grid;
 
 public class RelayIII extends Relay {
-
+	
 	public static final String ARQ_VAL = "!ARQ";
+
 	protected boolean useCrypto;
 
 	private final Map<String, List<Perturbation>> history = new HashMap<>();
+	
+	public final Set<String> subscribedTopics = new HashSet<>();
 
 	public RelayIII(ContinuousSpace<Object> space, Grid<Object> grid, String id, boolean useCrypto) {
 		super(space, grid, id);
 		this.useCrypto = useCrypto;
+		subscribedTopics.add("default");
 	}
 
 	@ScheduledMethod(start = 1, interval = 5)
@@ -55,6 +61,10 @@ public class RelayIII extends Relay {
 			if (p.isUnicastMessage() && p.receiverId.equals(getId())) {
 				receiveUnicastMessage(p);
 			}
+			
+			if (p.isTopicMessage() && subscribedTopics.contains(p.getTopic())) {
+				receiveTopicMessage(p.getSenderId(), p.getTopic(), p.val);
+			}
 		}
 	}
 
@@ -89,6 +99,10 @@ public class RelayIII extends Relay {
 			}
 		}
 		System.out.println("Received unicast msg from " + p.getSenderId() + " to " + getId() + " with value: " + value);
+	}
+	
+	private void receiveTopicMessage(String senderId, String topic, String message) {
+		System.out.println("Received topic message '" + topic + "' from " + senderId + " with value: " + message);
 	}
 
 }
