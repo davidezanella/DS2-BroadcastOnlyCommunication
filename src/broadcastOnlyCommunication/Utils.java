@@ -31,6 +31,10 @@ public class Utils {
 	public static List<Station> getAllStationsInGrid(Grid<Object> grid, Object actor) {
 		return getAllActorsInGrid(grid, actor, Station.class);
 	}
+	
+	public static List<Perturbation> getAllPerturbationsInGrid(Grid<Object> grid, Object actor) {
+		return getAllActorsInGrid(grid, actor, Perturbation.class);
+	}
 
 	public static <T> List<T> getAllActorsInGrid(Grid<Object> grid, Object actor, Class<T> clazz) {
 		var pt = grid.getLocation(actor);

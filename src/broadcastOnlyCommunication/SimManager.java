@@ -23,11 +23,16 @@ public class SimManager {
 	 * probability that the simulation manager destroy or creates a new relay,
 	 * respectively Value should be betwenn 1 and 100
 	 */
-	protected int probCrash;
-	protected int probNew;
-	// minimum and maximum number of relays
-	protected int minNum;
-	protected int maxNum;
+	private final int probRelayCrash;
+	private final int probRelayreation;
+
+	private final int minRelayCount;
+	private final int maxRelayCount;
+
+	private final int probPerturbationDrop;
+	
+	private final Random random = new Random();
+
 	// the id for the next created relay
 	protected int nextRelayId;
 
@@ -36,10 +41,11 @@ public class SimManager {
 		this.grid = grid;
 
 		Parameters params = RunEnvironment.getInstance().getParameters();
-		this.probCrash = params.getInteger("probCrash");
-		this.probNew = params.getInteger("probNew");
-		this.minNum = params.getInteger("minNumRelays");
-		this.maxNum = params.getInteger("maxNumRelays");
+		this.probRelayCrash = params.getInteger("probCrash");
+		this.probRelayreation = params.getInteger("probNew");
+		this.minRelayCount = params.getInteger("minNumRelays");
+		this.maxRelayCount = params.getInteger("maxNumRelays");
+		this.probPerturbationDrop = params.getInteger("probPerturbationDrop");
 
 		this.nextRelayId = params.getInteger("numRelays");
 	}
@@ -71,14 +77,13 @@ public class SimManager {
 	// make a random relay crash indefinitely with probability p
 	@ScheduledMethod(start = 1, interval = 100)
 	public void makeCrash() {
-		Random r = new Random();
-		int hasCrashed = r.nextInt(100) + 1;
+		int hasCrashed = random.nextInt(100) + 1;
 
-		if (hasCrashed <= probCrash) {
+		if (hasCrashed <= probRelayCrash) {
 			// get all relays
 			List<Relay> relays = Utils.getAllRelaysInGrid(grid, this);
-			if (relays.size() > 0 && relays.size() > minNum) {
-				Relay relayToCrash = relays.remove(r.nextInt(relays.size()));
+			if (!relays.isEmpty() && relays.size() > minRelayCount) {
+				Relay relayToCrash = relays.remove(random.nextInt(relays.size()));
 				System.out.println("Crashed a relay");
 				var context = ContextUtils.getContext(relayToCrash);
 				context.remove(relayToCrash);
@@ -89,13 +94,12 @@ public class SimManager {
 	// make a new relay appear with probability p
 	@ScheduledMethod(start = 1, interval = 100)
 	public void createNew() {
-		Random r = new Random();
-		int hasNew = r.nextInt(100) + 1;
+		int hasNew = random.nextInt(100) + 1;
 
-		if (hasNew <= probNew) {
+		if (hasNew <= probRelayreation) {
 			// get all relays
 			List<Relay> relays = Utils.getAllRelaysInGrid(grid, this);
-			if (relays.size() < maxNum) {
+			if (relays.size() < maxRelayCount) {
 				var id = "relay" + nextRelayId;
 				nextRelayId++;
 				Relay relay = Utils.instantiateCorrectRelayVersion(space, grid, id);
@@ -109,4 +113,20 @@ public class SimManager {
 			}
 		}
 	}
+
+	@ScheduledMethod(start = 1, interval = 10)
+	public void dropPerturbation() {
+		int wasDropped = random.nextInt(100) + 1;
+
+		if (wasDropped <= probPerturbationDrop) {
+			var perturbations = Utils.getAllPerturbationsInGrid(grid, this);
+			if (!perturbations.isEmpty()) {
+				var perturbationToDrop = perturbations.get(random.nextInt(perturbations.size()));
+				var context = ContextUtils.getContext(perturbationToDrop);
+				context.remove(perturbationToDrop);
+				System.out.println("Dropped a perturbation");
+			}
+		}
+	}
+
 }

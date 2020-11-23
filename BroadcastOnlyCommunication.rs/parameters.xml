@@ -30,18 +30,23 @@
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 											/>
-				<parameter name="transmissionSpeed" displayName="Transmission speed (kB/tick)" type="int" 
-						defaultValue="100" 
-						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
-											/>
 				<parameter name="protocolVersion" displayName="Protocol version" type="java.lang.String" 
 						defaultValue="PerfectConditions" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$StringStringConverter"
 												values="PerfectConditions DynamicNetwork RecoveringLoss Point-to-Point GroupCommunication PrivacyPreserving "
 											/>
+				<parameter name="probPerturbationDrop" displayName="Perturbation Drop Probability (0-100)" type="int" 
+						defaultValue="0" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+											/>
 				<parameter name="packetSize" displayName="Packet size (kB)" type="int" 
+						defaultValue="100" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+											/>
+				<parameter name="transmissionSpeed" displayName="Transmission speed (kB/tick)" type="int" 
 						defaultValue="100" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
