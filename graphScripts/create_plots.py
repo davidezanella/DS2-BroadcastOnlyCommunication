@@ -2,11 +2,22 @@ import csv
 import sys
 import argparse
 import matplotlib.pyplot as plt 
+import statistics
+
+'''
+This script has two run modes:
+(1)Plotting latencies - If the print_only_to param isn't provided, the script draw the graph of the latency
+   of each perturbation of a single simulation
+(2)Calculating latency - the script will append to a file the mean latency of a run, in the format
+   [RunType - latency], for future use with another script 
+'''
 
 def parse_arg(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument('--stations', type=str, help='Path to stations log file')
     parser.add_argument('--relays', type=str, help='Path to relays log file')
+    parser.add_argument('--scenario', type=str, help="Kind of simulation run")
+    parser.add_argument('--print_only_to', type=str, help='Path to print the latency result')
     return parser.parse_args(argv)
 
 
@@ -87,19 +98,28 @@ for pert in perturbations:
     y.append(perturbations[pert][1] - perturbations[pert][0])
     i+=1
 
-# plotting the points  
-plt.plot(x, y) 
-  
-# naming the x axis 
-plt.xlabel('Station - Ref') 
-# naming the y axis 
-plt.ylabel('Latency (in ticks)') 
-  
-# giving a title to my graph 
-plt.title('Latency graph') 
-  
-# function to show the plot 
-plt.show() 
+if(args.print_only_to == None):
+    # plotting the points  
+    plt.plot(x, y) 
+    
+    # naming the x axis 
+    plt.xlabel('Station - Ref') 
+    # naming the y axis 
+    plt.ylabel('Latency (in ticks)') 
+    
+    # giving a title to my graph 
+    plt.title('Latency graph') 
+    
+    # function to show the plot 
+    plt.show() 
+else:
+    if(args.scenario != None):
+        row=str(args.scenario)+","+str(statistics.median(y))
+
+        with open(args.print_only_to,'a') as fd:
+            fd.write(row)
+    else:
+        print("You have to specify a scenario type!")
 
 
 
