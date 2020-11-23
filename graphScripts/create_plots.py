@@ -56,7 +56,7 @@ perturbations = {}
 
 for station in stations:
     for pert in stations[station]:
-        perturbations[pert["station"], pert["sent_ref"]]=[pert["tick"], []]
+        perturbations[pert["station"], pert["sent_ref"]]=[pert["tick"], [], pert["value"]]
 
 print("Perturbations received by relays")
 #make a list of all sent perturbations
@@ -75,7 +75,7 @@ y = [] #y axis
 
 i = 0
 for pert in perturbations:
-    x.append(pert)
+    x.append(str(pert))
     count = 0
     latency = 0
     for data in perturbations[pert][1]:
