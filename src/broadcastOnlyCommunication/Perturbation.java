@@ -1,5 +1,7 @@
 package broadcastOnlyCommunication;
 
+import java.util.Objects;
+
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.space.grid.Grid;
 
@@ -124,6 +126,23 @@ public class Perturbation {
 		return topic;
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(receiverId, ref, senderId, topic, val);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof Perturbation))
+			return false;
+		Perturbation other = (Perturbation) obj;
+		return Objects.equals(receiverId, other.receiverId) && ref == other.ref
+				&& Objects.equals(senderId, other.senderId) && Objects.equals(topic, other.topic)
+				&& Objects.equals(val, other.val);
+	}
+	
 	@Override
 	public String toString() {
 		return "Perturbation [senderId=" + senderId + ", ref=" + ref + ", val=" + val + "]";
