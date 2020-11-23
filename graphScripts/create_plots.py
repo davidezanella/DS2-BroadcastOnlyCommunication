@@ -1,6 +1,7 @@
 import csv
 import sys
 import argparse
+import matplotlib.pyplot as plt 
 
 def parse_arg(argv):
     parser = argparse.ArgumentParser()
@@ -17,27 +18,25 @@ csv_station = csv.DictReader(file_station, delimiter=',')
 file_relay = open(str(args.relays))
 csv_relay = csv.DictReader(file_relay, delimiter=',')
 
-row_count = 0
-
 stations = {}
+relays = {}
+
+#create a dict stations[station_id: [<tick, sent_ref, value>]]
 for row in csv_station:
-    row_count+=1
     station_id = row['StationId']
     if station_id not in stations.keys():
         stations[station_id] = []
     if row['NewPerturbationValue'] != "":
         stations[station_id].append({
+            'station': row['StationId'],
             'tick': float(row['tick']),
             'sent_ref': int(row['CurrentRef'])-1,
             'value': row['NewPerturbationValue']
         })
 
-print(row_count)
-row_count = 0
 
-relays = {}
+#create a dict relays[relay_id: [<tick, station, ref>]]
 for row in csv_relay:
-    row_count+=1
     relay_id = row['RelayId']
     if relay_id not in relays.keys():
         relays[relay_id] = []
@@ -51,20 +50,61 @@ for row in csv_relay:
                 'ref': int(splitted[1])
             })
 
-print(row_count)    
+perturbations = {}
 
-tot = 0
-count = 0
-for station in stations.keys():
-    for p_sent in stations[station]:
-        for relay in relays.keys():
-            available_pert = list(filter(lambda x: 
-                x['station'] == station and
-                x['ref'] == p_sent['sent_ref'], relays[relay]))
-            min_tick = min(available_pert, key=lambda x: x['tick'])
-            tot += min_tick['tick'] - p_sent['tick']
-            count += 1
+#plot mean latency per perturbation
 
-print("Tot:", tot)
-print("Count:", count)
-print("Mean perturbation time:", tot / count)
+for station in stations:
+    for pert in stations[station]:
+        perturbations[pert["station"], pert["sent_ref"]]=[pert["tick"], []]
+
+print("Perturbations received by relays")
+#make a list of all sent perturbations
+for relay in relays:
+    #arr_p means arrived_perturbation, it is not pirate language
+    for arr_p in relays[relay]:
+        perturbations[arr_p["station"], arr_p["ref"]][1].append({
+            'relay': relay,
+            'arr_tick': arr_p["tick"]
+        })
+        print(perturbations[arr_p["station"], arr_p["ref"]])
+
+#compute the mean latency for each pert and draw graph
+x = [] #x axis
+y = [] #y axis
+
+i = 0
+for pert in perturbations:
+    x.append(pert)
+    count = 0
+    latency = 0
+    for data in perturbations[pert][1]:
+        count+=1
+        latency+=data['arr_tick']
+    
+    latency = latency / count
+    perturbations[pert][1] = latency
+    y.append(perturbations[pert][1] - perturbations[pert][0])
+    i+=1
+
+# plotting the points  
+plt.plot(x, y) 
+  
+# naming the x axis 
+plt.xlabel('Station - Ref') 
+# naming the y axis 
+plt.ylabel('Latency (in ticks)') 
+  
+# giving a title to my graph 
+plt.title('Latency graph') 
+  
+# function to show the plot 
+plt.show() 
+
+
+
+
+
+
+
+
