@@ -1,0 +1,34 @@
+# Broadcast-Only Communication Model Based on Replicated Append-Only Logs
+This project implements the broadcast-only communication model based on replicated append-only logs, as specified in the [assigned paper](https://bucchiarone.bitbucket.io/papers/acmdl19-295.pdf)
+
+## Requirements
+* Java 11
+* Eclipse IDE 2020-06 (4.16.0)
+* Repast Symphony 2.8.0
+
+Optionally, for running the plotting scripts:
+* Python 3
+
+## Installation
+1. Clone the repository
+2. Import the project as Repast Project into Eclipse
+3. Run the simulator
+
+## Simulator parameters
+* Maximum number of relays: the maximum number of relays that can be present on a given run
+* Minimum number of relays: the minimum number of relays that can be present on a given run
+* New relay probability: the probability that a new relay will be spawned in a period of 100 ticks
+* Relay crash probability: the probability that a new relay will be deleted in a period of 100 ticks
+* Number of relays: initial number of relays
+* Number of stations: initial number of stations
+* Packet size: size of packets sent via perturbations
+* Transmission speed: available bandwidth per tick
+* Perturbation drop probability: probability that a perturbation is dropped
+* Protocol version: defines which protocol version (from those presented in the paper) the simulator will run
+* Stop at: the simulation will stop once it reaches the indicated amount of ticks
+
+## Plotting script parameters
+
+
+## Reference
+Christian F. Tschudin: Broadcast-Only Communication Model Based on Replicated Append-Only Logs, ACM SIGCOMM Computer Communication Review, Volume 49 Issue 2, April 2019
