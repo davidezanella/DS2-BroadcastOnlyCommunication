@@ -29,6 +29,11 @@ Optionally, for running the plotting scripts:
 
 ## Plotting script parameters
 
+###### create_plots.py
+* --stations: path to stations log file (can be batch file)
+* --relays: path to relays log file (can be batch file)
+* --scenario: if using batch log files, define the protocol used in the simulation
+* --print_only_to: doesn't draw graph, but appends latency results to csv file
 
 ## Reference
 Christian F. Tschudin: Broadcast-Only Communication Model Based on Replicated Append-Only Logs, ACM SIGCOMM Computer Communication Review, Volume 49 Issue 2, April 2019

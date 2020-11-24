@@ -116,9 +116,6 @@ def read_relays_batch(relays_path):
     
     return run_relays
 
-
-
-
 def draw_latency(x, y):
     # plotting the points  
     plt.plot(x, y) 
@@ -181,17 +178,54 @@ def main():
             i+=1
 
         draw_latency(x,y)
-    elif(args.scenario != None and args.print_only_to == None):
+    elif(args.scenario != None and args.print_only_to != None):
         #usage mode (2), load multiple scenario from batch log
         stations = read_stations_batch(args.stations)
         relays = read_relays_batch(args.relays)
 
+        #cumulative latency for all runs
+        runs_latency = []
+        
         #now that we have all data, compute the median latency for all runs
         for run in stations:
-            
+            perturbations = {}
+
+            #create a dict station, sent_ref: tick, [], value
+            for station in stations[run]:
+                for pert in stations[run][station]:
+                    perturbations[pert["station"], pert["sent_ref"]]=[pert["tick"], [], pert["value"]]
+
+            for relay in relays[run]:
+                #arr_p means arrived_perturbation, it is not pirate language, yes this code was copy-pasted
+                for arr_p in relays[run][relay]:
+                    perturbations[arr_p["station"], arr_p["ref"]][1].append({
+                        'relay': relay,
+                        'arr_tick': arr_p["tick"]
+                    })
+                    print(perturbations[arr_p["station"], arr_p["ref"]])
+
+            y = []
+
+            for pert in perturbations:
+                count = 0
+                latency = 0
+                for data in perturbations[pert][1]:
+                    count+=1
+                    latency+=data['arr_tick']
+                
+                latency = latency / count
+                perturbations[pert][1] = latency
+                y.append(perturbations[pert][1] - perturbations[pert][0])
+
+            #calculate the latency of a single run
+            cumulative_latency = 0
+            for lat in y:
+                cumulative_latency+=lat
+
+            runs_latency.append(cumulative_latency/len(y))
 
 
-        row=str(args.scenario)+","+str(statistics.median(y))
+        row=str(args.scenario)+","+str(statistics.median(runs_latency))
 
         with open(args.print_only_to,'a') as fd:
             fd.write(row)
