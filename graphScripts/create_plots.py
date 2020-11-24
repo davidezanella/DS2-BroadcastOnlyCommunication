@@ -1,5 +1,6 @@
 import csv
 import os
+from os import path
 import sys
 import argparse
 import matplotlib.pyplot as plt 
@@ -227,8 +228,13 @@ def main():
 
         row=str(args.scenario)+","+str(statistics.median(runs_latency))
 
-        with open(args.print_only_to,'a') as fd:
-            fd.write(row)
+        if(path.exists(args.print_only_to)):
+            with open(args.print_only_to,'a') as fd:
+                fd.write(row)
+        else:
+            with open(args.print_only_to,'a') as fd:
+                fd.write("Scenario,Latency")
+                fd.write(row)
     else:
         print("Missing arguments!")
         

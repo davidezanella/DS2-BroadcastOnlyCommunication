@@ -28,12 +28,16 @@ Optionally, for running the plotting scripts:
 * Stop at: the simulation will stop once it reaches the indicated amount of ticks
 
 ## Plotting script parameters
-
 ###### create_plots.py
 * --stations: path to stations log file (can be batch file)
 * --relays: path to relays log file (can be batch file)
 * --scenario: if using batch log files, define the protocol used in the simulation
 * --print_only_to: doesn't draw graph, but appends latency results to csv file
+
+###### plot_multiple_runs.py
+* --input_csv: path to csv file generated via create_plots.py
+
+Alternatively, if you don't generate the csv file via create_plots.py, you can create a two-columns csv, where the columns follow the pattern "Scenario","Latency"
 
 ## Reference
 Christian F. Tschudin: Broadcast-Only Communication Model Based on Replicated Append-Only Logs, ACM SIGCOMM Computer Communication Review, Volume 49 Issue 2, April 2019
