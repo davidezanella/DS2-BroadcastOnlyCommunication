@@ -26,10 +26,13 @@ public class RelayIII extends Relay {
 		super(space, grid, id);
 		this.useCrypto = useCrypto;
 
-		Random r = new Random();
-		for(int i = 0; i < 2; i++) {
-			String topic = SimManager.topicsList.get(r.nextInt(SimManager.topicsList.size()));
-			subscribedTopics.add(topic);
+		int topicListSize = SimManager.topicsList.size();
+		if (topicListSize > 0) {
+			Random r = new Random();
+			for(int i = 0; i < 2; i++) {
+				String topic = SimManager.topicsList.get(r.nextInt(topicListSize));
+				subscribedTopics.add(topic);
+			}
 		}
 	}
 
