@@ -2,9 +2,11 @@ package broadcastOnlyCommunication;
 
 import java.util.Random;
 import java.security.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.UUID;
 
 import repast.simphony.context.Context;
 import repast.simphony.engine.environment.RunEnvironment;
@@ -19,9 +21,10 @@ public class SimManager {
 	private ContinuousSpace<Object> space;
 	private Grid<Object> grid;
 	public final static Map<String, KeyPair> keyRing = new TreeMap<>();
+	public final static List<String> topicsList = new ArrayList<>();
 	/*
 	 * probability that the simulation manager destroy or creates a new relay,
-	 * respectively Value should be betwenn 1 and 100
+	 * respectively Value should be between 1 and 100
 	 */
 	private final int probRelayCrash;
 	private final int probRelayreation;
@@ -71,6 +74,17 @@ public class SimManager {
 			} catch (NoSuchAlgorithmException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	// create some topics
+	public void initializeTopics() {
+		List<Relay> relays = Utils.getAllRelaysInGrid(grid, this);
+		double maxNumTopics = relays.size() / 3 * 2;
+		
+		for (int i = 0; i < maxNumTopics; i++) {
+			String topic = UUID.randomUUID().toString();			
+			topicsList.add(topic);
 		}
 	}
 

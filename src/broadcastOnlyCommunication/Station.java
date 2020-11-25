@@ -55,7 +55,9 @@ public class Station {
 			}
 			this.lastPerturbation = Utils.createNewUnicastPerturbation(grid, id, ref, value, this, receiver.getId());
 		} else if (useTopic) {
-			this.lastPerturbation = Utils.createNewTopicPerturbation(grid, id, ref, value, this, "default");
+			Random r = new Random();
+			String topic = SimManager.topicsList.get(r.nextInt(SimManager.topicsList.size()));
+			this.lastPerturbation = Utils.createNewTopicPerturbation(grid, id, ref, value, this, topic);
 		} else {
 			this.lastPerturbation = Utils.createNewPerturbation(grid, id, ref, value, this);
 		}

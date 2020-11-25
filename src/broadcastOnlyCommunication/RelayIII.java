@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import repast.simphony.engine.schedule.ScheduledMethod;
@@ -24,7 +25,12 @@ public class RelayIII extends Relay {
 	public RelayIII(ContinuousSpace<Object> space, Grid<Object> grid, String id, boolean useCrypto) {
 		super(space, grid, id);
 		this.useCrypto = useCrypto;
-		subscribedTopics.add("default");
+
+		Random r = new Random();
+		for(int i = 0; i < 2; i++) {
+			String topic = SimManager.topicsList.get(r.nextInt(SimManager.topicsList.size()));
+			subscribedTopics.add(topic);
+		}
 	}
 
 	@ScheduledMethod(start = 1, interval = 5)
