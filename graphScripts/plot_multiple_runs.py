@@ -28,29 +28,27 @@ def main():
     for row in csv_runs:
         scenario = row['Scenario']
         if scenario not in latencies.keys():
-            latencies[scenario] = []
-        latencies[scenario].append(float(row['Latency']))      
+            latencies[scenario] = {'x': [], 'y': []}
+        latencies[scenario]['x'].append(row['Perturbation']) 
+        latencies[scenario]['y'].append(float(row['Latency']))
 
-    x = latencies.keys()
-    y = []
-
-    for scenario in x:
-        y.append(statistics.median(latencies[scenario]))
-
-    # plotting the points  
-    plt.bar(x, y, color='green', width=0.5)
+    for scenario in latencies:
+        # plotting the points  
+        plt.plot(latencies[scenario]['x'], latencies[scenario]['y'], label=scenario)
     
     # naming the x axis 
     plt.xlabel('Protocol') 
     # naming the y axis 
     plt.ylabel('Latency (in ticks)') 
     
+    # show the legend
+    plt.legend()
+    
     # giving a title to my graph 
     plt.title('Latency graph') 
     
     # function to show the plot 
     plt.show()      
-
 
 
 if __name__ == "__main__":

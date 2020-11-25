@@ -187,7 +187,7 @@ def main():
         relays = read_relays_batch(args.relays)
 
         #cumulative latency for all runs
-        runs_latency = []
+        pert_latency = {}
         
         #now that we have all data, compute the median latency for all runs
         for run in stations:
@@ -209,36 +209,26 @@ def main():
                         perturbations[arr_p["station"], arr_p["ref"]][1][relay] = arr_p["tick"]
                     print(perturbations[arr_p["station"], arr_p["ref"]])
 
-            y = []
-
             for pert in perturbations:
-                count = 0
-                latency = 0
-                for arr_tick in perturbations[pert][1].values():
-                    count+=1
-                    latency+=arr_tick
+                mean_latency = statistics.mean(perturbations[pert][1].values())
                 
-                latency = latency / count
-                perturbations[pert][1] = latency
-                y.append(perturbations[pert][1] - perturbations[pert][0])
+                # save the latency of the perturbation for this run
+                if pert not in pert_latency.keys():
+                    pert_latency[pert] = []
+                
+                pert_latency[pert].append(mean_latency - perturbations[pert][0])
 
-            #calculate the latency of a single run
-            cumulative_latency = 0
-            for lat in y:
-                cumulative_latency+=lat
-
-            runs_latency.append(cumulative_latency/len(y))
-
-
-        row="\n"+str(args.scenario)+","+str(statistics.mean(runs_latency))
+        rows = ""
+        for p in pert_latency:
+            rows += "\n" + str(args.scenario) + ',"'+ str(p) + '",' + str(statistics.mean(pert_latency[p]))
 
         if(path.exists(args.print_only_to)):
             with open(args.print_only_to,'a') as fd:
-                fd.write(row)
+                fd.write(rows)
         else:
             with open(args.print_only_to,'a') as fd:
-                fd.write("Scenario,Latency")
-                fd.write(row)
+                fd.write("Scenario,Perturbation,Latency")
+                fd.write(rows)
     else:
         print("Missing arguments!")
         
