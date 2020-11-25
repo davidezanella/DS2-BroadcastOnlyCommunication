@@ -142,20 +142,22 @@ def main():
         stations = read_stations(args.stations)
         relays = read_relays(args.relays)
 
-        #create a dict station, sent_ref: tick, [], value
+        #create a dict station, sent_ref: tick, {}, value
         for station in stations:
             for pert in stations[station]:
-                perturbations[pert["station"], pert["sent_ref"]]=[pert["tick"], [], pert["value"]]
+                perturbations[pert["station"], pert["sent_ref"]]=[pert["tick"], {}, pert["value"]]
 
         print("Perturbations received by relays")
         #make a list of all sent perturbations
         for relay in relays:
             #arr_p means arrived_perturbation, it is not pirate language
             for arr_p in relays[relay]:
-                perturbations[arr_p["station"], arr_p["ref"]][1].append({
-                    'relay': relay,
-                    'arr_tick': arr_p["tick"]
-                })
+                old_v = None
+                if relay in perturbations[arr_p["station"], arr_p["ref"]][1].keys():  # another value already inserted
+                    old_v = perturbations[arr_p["station"], arr_p["ref"]][1][relay]
+                    
+                if old_v is None or old_v > arr_p["tick"]:
+                    perturbations[arr_p["station"], arr_p["ref"]][1][relay] = arr_p["tick"]
                 print(perturbations[arr_p["station"], arr_p["ref"]])
 
         #compute the mean latency for each pert and draw graph
@@ -169,9 +171,9 @@ def main():
             x.append(str(pert))
             count = 0
             latency = 0
-            for data in perturbations[pert][1]:
+            for arr_tick in perturbations[pert][1].values():
                 count+=1
-                latency+=data['arr_tick']
+                latency+=arr_tick
             
             latency = latency / count
             perturbations[pert][1] = latency
@@ -191,18 +193,20 @@ def main():
         for run in stations:
             perturbations = {}
 
-            #create a dict station, sent_ref: tick, [], value
+            #create a dict station, sent_ref: tick, {}, value
             for station in stations[run]:
                 for pert in stations[run][station]:
-                    perturbations[pert["station"], pert["sent_ref"]]=[pert["tick"], [], pert["value"]]
+                    perturbations[pert["station"], pert["sent_ref"]]=[pert["tick"], {}, pert["value"]]
 
             for relay in relays[run]:
                 #arr_p means arrived_perturbation, it is not pirate language, yes this code was copy-pasted
                 for arr_p in relays[run][relay]:
-                    perturbations[arr_p["station"], arr_p["ref"]][1].append({
-                        'relay': relay,
-                        'arr_tick': arr_p["tick"]
-                    })
+                    old_v = None
+                    if relay in perturbations[arr_p["station"], arr_p["ref"]][1].keys():  # another value already inserted
+                        old_v = perturbations[arr_p["station"], arr_p["ref"]][1][relay]
+                        
+                    if old_v is None or old_v > arr_p["tick"]:
+                        perturbations[arr_p["station"], arr_p["ref"]][1][relay] = arr_p["tick"]
                     print(perturbations[arr_p["station"], arr_p["ref"]])
 
             y = []
@@ -210,9 +214,9 @@ def main():
             for pert in perturbations:
                 count = 0
                 latency = 0
-                for data in perturbations[pert][1]:
+                for arr_tick in perturbations[pert][1].values():
                     count+=1
-                    latency+=data['arr_tick']
+                    latency+=arr_tick
                 
                 latency = latency / count
                 perturbations[pert][1] = latency
@@ -226,7 +230,7 @@ def main():
             runs_latency.append(cumulative_latency/len(y))
 
 
-        row=str(args.scenario)+","+str(statistics.median(runs_latency))
+        row="\n"+str(args.scenario)+","+str(statistics.mean(runs_latency))
 
         if(path.exists(args.print_only_to)):
             with open(args.print_only_to,'a') as fd:
