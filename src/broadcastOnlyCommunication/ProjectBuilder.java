@@ -7,6 +7,8 @@ import repast.simphony.context.space.grid.GridFactory;
 import repast.simphony.context.space.grid.GridFactoryFinder;
 import repast.simphony.dataLoader.ContextBuilder;
 import repast.simphony.engine.environment.RunEnvironment;
+import repast.simphony.engine.schedule.ISchedule;
+import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.parameter.Parameters;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.continuous.NdPoint;
@@ -53,9 +55,14 @@ public class ProjectBuilder implements ContextBuilder<Object> {
 		
 		manager.initializeCrypto();
 		manager.initializeTopics();
-		
+
 		int maxTicks = params.getInteger("stopAt");
-		RunEnvironment.getInstance().endAt(maxTicks);
+
+		ISchedule schedule = RunEnvironment.getInstance().getCurrentSchedule();
+		ScheduleParameters schedParams = ScheduleParameters.createOneTime(maxTicks);
+		schedule.schedule(schedParams, manager, "stopSendingPerturbations");
+		
+		RunEnvironment.getInstance().endAt(2 * maxTicks);
 
 		return context;
 	}
