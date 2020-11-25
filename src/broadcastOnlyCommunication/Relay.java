@@ -74,7 +74,11 @@ public abstract class Relay {
 	public String getArrivedPerturbations() {
 		var arrived = new ArrayList<String>();
 		for (var pert : processedPerturbations) {
-			arrived.add(pert.senderId + " " + pert.ref);
+			if (!pert.val.equals(RelayIII.ARQ_VAL) && // avoid ARQ request
+				!(pert.isUnicastMessage() && !pert.receiverId.equals(id)) && // avoid unicast where I'm not the receiver
+				!(pert.isTopicMessage() && !((RelayIII)this).subscribedTopics.contains(pert.getTopic()))) { // avoid topic where I'm not subscribed
+				arrived.add(pert.senderId + " " + pert.ref);
+			}
 		}
 
 		processedPerturbations.clear();
