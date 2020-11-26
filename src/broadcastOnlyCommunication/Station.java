@@ -33,9 +33,6 @@ public class Station {
 
 	@ScheduledMethod(start = 1, interval = 100)
 	public void sendPerturbation() {
-		if (!SimManager.canSendPerturbations) // the simulation is stopped 
-			return;
-		
 		var value = UUID.randomUUID().toString();
 		
 		// in p2p comm, all messages are unicast

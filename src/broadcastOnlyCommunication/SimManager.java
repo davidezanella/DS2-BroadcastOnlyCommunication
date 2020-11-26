@@ -38,8 +38,6 @@ public class SimManager {
 
 	// the id for the next created relay
 	protected int nextRelayId;
-	// state if a station can send perturbations
-	public static boolean canSendPerturbations = true;
 
 	public SimManager(ContinuousSpace<Object> space, Grid<Object> grid) {
 		this.space = space;
@@ -143,11 +141,6 @@ public class SimManager {
 				System.out.println("Dropped a perturbation");
 			}
 		}
-	}
-
-	public void stopSendingPerturbations() {
-		canSendPerturbations = false;
-		System.out.println("PERTURBATIONS ARE NOW STOPPED!");
 	}
 
 }
