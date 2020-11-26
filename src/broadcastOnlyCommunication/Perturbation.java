@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.space.grid.Grid;
+import repast.simphony.space.grid.GridPoint;
 
 public class Perturbation {
 	
@@ -14,6 +15,7 @@ public class Perturbation {
 	private float radius;
 	public final String receiverId;
 	private final String topic;
+	private GridPoint center;
 	
 	/**
 	 * number of ticks passed from its creation. Used for velocity and distance calculations
@@ -125,6 +127,10 @@ public class Perturbation {
 		}
 		return topic;
 	}
+	
+	public void setCenter(GridPoint center) {
+		this.center = center;
+	}
 
 	@Override
 	public int hashCode() {
@@ -140,7 +146,7 @@ public class Perturbation {
 		Perturbation other = (Perturbation) obj;
 		return Objects.equals(receiverId, other.receiverId) && ref == other.ref
 				&& Objects.equals(senderId, other.senderId) && Objects.equals(topic, other.topic)
-				&& Objects.equals(val, other.val);
+				&& Objects.equals(val, other.val) && Objects.equals(center, other.center);
 	}
 	
 	@Override
