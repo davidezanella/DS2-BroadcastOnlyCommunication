@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import repast.simphony.engine.environment.RunEnvironment;
+import repast.simphony.engine.schedule.Schedule;
+import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.space.grid.Grid;
 
@@ -14,7 +17,7 @@ public class Station {
 	protected final boolean useUnicast;
 	protected final boolean useCrypto;
 	protected final boolean useTopic;
-
+	
 	private Perturbation lastPerturbation; // used for logging purposes
 
 	public Station(Grid<Object> grid, String id, boolean useUnicast, boolean useCrypto, boolean useTopic) {
@@ -29,9 +32,17 @@ public class Station {
 		this.useUnicast = useUnicast;
 		this.useCrypto = useCrypto;
 		this.useTopic = useTopic;
+		scheduleSendPerturbation();
+	}
+	
+	private void scheduleSendPerturbation() {
+		var r = new Random();
+		var params = ScheduleParameters.createRepeating(r.nextInt(100), 100);
+		System.out.println("Scheduled");
+		
+		RunEnvironment.getInstance().getCurrentSchedule().schedule(params, this, "sendPerturbation");
 	}
 
-	@ScheduledMethod(start = 1, interval = 100)
 	public void sendPerturbation() {
 		var value = UUID.randomUUID().toString();
 		
