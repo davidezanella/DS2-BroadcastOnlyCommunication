@@ -158,13 +158,10 @@ def main():
                     
                 if old_v is None or old_v > arr_p["tick"]:
                     perturbations[arr_p["station"], arr_p["ref"]][1][relay] = arr_p["tick"]
-                print(perturbations[arr_p["station"], arr_p["ref"]])
 
         #compute the mean latency for each pert and draw graph
         x = [] #x axis
         y = [] #y axis
-
-        i = 0
 
         #for each perturbation, calculate the mean latency
         for pert in perturbations:
@@ -178,7 +175,6 @@ def main():
             latency = latency / count
             perturbations[pert][1] = latency
             y.append(perturbations[pert][1] - perturbations[pert][0])
-            i+=1
 
         draw_latency(x,y)
     elif(args.scenario != None and args.print_only_to != None):
@@ -201,34 +197,39 @@ def main():
             for relay in relays[run]:
                 #arr_p means arrived_perturbation, it is not pirate language, yes this code was copy-pasted
                 for arr_p in relays[run][relay]:
-                    old_v = None
-                    if relay in perturbations[arr_p["station"], arr_p["ref"]][1].keys():  # another value already inserted
-                        old_v = perturbations[arr_p["station"], arr_p["ref"]][1][relay]
-                        
+                    old_v = perturbations[arr_p["station"], arr_p["ref"]][1].get(relay)  # if another value is already inserted
+
                     if old_v is None or old_v > arr_p["tick"]:
                         perturbations[arr_p["station"], arr_p["ref"]][1][relay] = arr_p["tick"]
-                    print(perturbations[arr_p["station"], arr_p["ref"]])
 
             for pert in perturbations:
                 mean_latency = statistics.mean(perturbations[pert][1].values())
                 
                 # save the latency of the perturbation for this run
                 if pert not in pert_latency.keys():
-                    pert_latency[pert] = []
+                    pert_latency[pert] = [perturbations[pert][0], []] # sending_tick, latency
                 
-                pert_latency[pert].append(mean_latency - perturbations[pert][0])
+                pert_latency[pert][1].append(mean_latency - perturbations[pert][0])
 
-        rows = ""
+        rows = []
+
         for p in pert_latency:
-            rows += "\n" + str(args.scenario) + ',"'+ str(p) + '",' + str(statistics.mean(pert_latency[p]))
+            rows.append({
+                    'Scenario': str(args.scenario),
+                    'Perturbation': str(p),
+                    'Latency': str(statistics.mean(pert_latency[p][1])),
+                    'Tick': pert_latency[p][0]
+                })
+            #rows += "\n" + str(args.scenario) + ',"'+ str(p) + '",' + str(statistics.mean(pert_latency[p]))
 
-        if(path.exists(args.print_only_to)):
-            with open(args.print_only_to,'a') as fd:
-                fd.write(rows)
-        else:
-            with open(args.print_only_to,'a') as fd:
-                fd.write("Scenario,Perturbation,Latency")
-                fd.write(rows)
+        file_exists = path.exists(args.print_only_to)
+        with open(args.print_only_to, 'a') as fd:
+            writer = csv.DictWriter(fd, fieldnames=rows[0].keys())
+
+            if not file_exists:
+                writer.writeheader()
+
+            writer.writerows(rows)
     else:
         print("Missing arguments!")
         
