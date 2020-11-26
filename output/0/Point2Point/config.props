@@ -1,9 +1,0 @@
-model.archive = /home/davide/UNI/DS2/DS2-BroadcastOnlyCommunication/output/0/Point2Point/complete_model.jar
-batch.params.file = scenario.rs/batch_params.xml
-ssh.key_dir = /home/davide/UNI/DS2/DS2-BroadcastOnlyCommunication/~/.ssh
-poll.frequency = 60.0
-model.output = /home/davide/UNI/DS2/DS2-BroadcastOnlyCommunication/output/0/Point2Point
-
-vm.arguments = 
-local.0.instances = 2
-local.0.working_directory = /tmp
