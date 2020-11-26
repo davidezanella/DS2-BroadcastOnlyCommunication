@@ -96,11 +96,16 @@ public class Utils {
 		return startPropagatingPerturbation(grid, creator, p);
 	}
 	
+	public static Perturbation forwardCopyOfPerturbation(Grid<Object> grid, Perturbation p, Object creator) {
+		return startPropagatingPerturbation(grid, creator, p.copy());
+	}
+	
 	private static Perturbation startPropagatingPerturbation(Grid<Object> grid, Object creator, Perturbation p) {
 		var pt = grid.getLocation(creator);
 
 		@SuppressWarnings("unchecked")
 		var context = (Context<Perturbation>) ContextUtils.getContext(creator);
+		p.setCenter(pt);
 		context.add(p);
 		grid.moveTo(p, (int) pt.getX(), (int) pt.getY());
 		

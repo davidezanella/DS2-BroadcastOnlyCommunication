@@ -27,8 +27,8 @@ public class Perturbation {
 		this.senderId = src;
 		this.ref = ref;
 		this.val = val;
-		this.receiverId = null;
 		this.topic = null;
+		this.receiverId = null;
 	}
 	
 	public Perturbation(Grid<Object> grid, String senderId, int ref, String val, String receiverId, String topic) {
@@ -36,9 +36,22 @@ public class Perturbation {
 		this.senderId = senderId;
 		this.ref = ref;
 		this.val = val;
-		this.topic = topic;
 		this.receiverId = receiverId;
+		this.topic = topic;
 	}
+	
+	
+	public Perturbation copy() {
+		return new Perturbation(
+				grid,
+				senderId,
+				ref,
+				val,
+				receiverId,
+				topic
+		);
+	}
+	
 	
 	public static Perturbation createUnicastPerturbation(Grid<Object> grid, String src, int ref, String val, String receiverId) {
 		return new Perturbation(grid, src, ref, val, receiverId, null);
@@ -72,7 +85,7 @@ public class Perturbation {
 			.peek(relayInRange -> System.out.println("Deliverying perturbation to " + relayInRange))
 			.forEach(relayInRange -> relayInRange.onSense(Perturbation.this));
 	}
-	
+
 	private void increaseRadius() {
 		if (ticks <= 0) {
 			radius = 0.5f;

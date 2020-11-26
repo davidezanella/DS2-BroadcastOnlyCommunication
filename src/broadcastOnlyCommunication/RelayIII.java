@@ -26,6 +26,7 @@ public class RelayIII extends Relay {
 		super(space, grid, id);
 		this.useCrypto = useCrypto;
 
+		
 		int topicListSize = SimManager.topicsList.size();
 		if (topicListSize > 0) {
 			Random r = new Random();

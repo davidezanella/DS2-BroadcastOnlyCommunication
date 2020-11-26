@@ -51,7 +51,7 @@ public abstract class Relay {
 			if (missingBytes <= 0) {
 				// I've sent all the bytes of the perturbation				
 				var p = perturbationsToSend.remove(0);
-				Utils.createNewPerturbation(grid, p.senderId, p.ref, p.val, this);
+				Utils.forwardCopyOfPerturbation(grid, p, this);
 				
 				missingBytes = packetSize;
 			}
