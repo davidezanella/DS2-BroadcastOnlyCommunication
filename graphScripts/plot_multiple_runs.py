@@ -21,7 +21,7 @@ def parse_arg(argv):
 def plot_latency(latencies, x, x_labels, remove_last):
     for scenario in latencies:
         # plotting the points  
-        plt.plot(x[:-remove_last], latencies[scenario][:-remove_last], label=scenario)
+        plt.plot(x[:-remove_last], latencies[scenario][:-remove_last], label=scenario, alpha=0.7)
     
     # naming the x axis 
     plt.xlabel('Perturbation') 
@@ -34,6 +34,10 @@ def plot_latency(latencies, x, x_labels, remove_last):
     # show the legend
     plt.legend()
     
+    # set y min value to 0
+    axes = plt.gca()
+    axes.set_ylim([0, None])
+    
     # giving a title to my graph 
     plt.title('Latency graph') 
     
@@ -44,7 +48,7 @@ def plot_latency(latencies, x, x_labels, remove_last):
 def plot_relays_reached(relays_reached, x, x_labels, remove_last):
     for scenario in relays_reached:
         # plotting the points  
-        plt.plot(x[:-remove_last], relays_reached[scenario][:-remove_last], label=scenario)
+        plt.plot(x[:-remove_last], relays_reached[scenario][:-remove_last], label=scenario, alpha=0.7)
     
     # naming the x axis 
     plt.xlabel('Perturbation') 
@@ -56,6 +60,10 @@ def plot_relays_reached(relays_reached, x, x_labels, remove_last):
     
     # show the legend
     plt.legend()
+    
+    # set y min value to 0
+    axes = plt.gca()
+    axes.set_ylim([0, None])
     
     # giving a title to my graph 
     plt.title('Reached relays graph') 
@@ -91,7 +99,7 @@ def main():
         relays_reached[scenario].append(float(row['Count']))
         
         x.append(row['Perturbation']) 
-        x_labels[row['Perturbation']] = row['Tick']
+        x_labels[row['Perturbation']] = int(float(row['Tick']))
 
     x = list(set(x))
 
