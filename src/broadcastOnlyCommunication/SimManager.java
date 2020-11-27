@@ -78,11 +78,9 @@ public class SimManager {
 	}
 
 	// create some topics
-	public void initializeTopics() {
-		List<Relay> relays = Utils.getAllRelaysInGrid(grid, this);
-		double maxNumTopics = relays.size() / 3 * 2;
-		
-		for (int i = 0; i < maxNumTopics; i++) {
+	public static void initializeTopics(int relaysCount) {
+		int nTopics = (relaysCount / 3) * 2;		
+		for (int i = 0; i < nTopics; i++) {
 			String topic = UUID.randomUUID().toString();			
 			topicsList.add(topic);
 		}

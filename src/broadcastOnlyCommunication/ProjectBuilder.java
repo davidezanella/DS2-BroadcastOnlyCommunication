@@ -36,6 +36,7 @@ public class ProjectBuilder implements ContextBuilder<Object> {
 			context.add(station);
 		}
 		int relayCount = params.getInteger("numRelays");
+		SimManager.initializeTopics(relayCount);
 		for (int i = 0; i < relayCount; i++) {
 			var id = "relay" + i;
 			Relay relay = Utils.instantiateCorrectRelayVersion(space, grid, id);			
@@ -52,7 +53,6 @@ public class ProjectBuilder implements ContextBuilder<Object> {
 		grid.moveTo(manager, 0, 0);
 		
 		manager.initializeCrypto();
-		manager.initializeTopics();
 		
 		int maxTicks = params.getInteger("stopAt");
 		RunEnvironment.getInstance().endAt(maxTicks);
