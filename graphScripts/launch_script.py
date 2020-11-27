@@ -2,13 +2,13 @@ from os import listdir, system
 from os.path import isfile
 
 
-protocol_folder_name = "1"
+protocol_folder_name = "6"
 
 output_path = '../output/'
 tmp_path = output_path + protocol_folder_name
 scenarios_dir = listdir(tmp_path)
 
-csv_filename = "test.csv"
+csv_filename = protocol_folder_name + ".csv"
 
 for scenario in scenarios_dir:
     print(scenario)

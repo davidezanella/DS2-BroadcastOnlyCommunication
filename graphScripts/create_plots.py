@@ -203,13 +203,16 @@ def main():
                         perturbations[arr_p["station"], arr_p["ref"]][1][relay] = arr_p["tick"]
 
             for pert in perturbations:
-                mean_latency = statistics.mean(perturbations[pert][1].values())
+                if len(perturbations[pert][1].values()) > 0:
+                    mean_latency = statistics.mean(perturbations[pert][1].values())  - perturbations[pert][0]
+                else:
+                    mean_latency = 0
                 
                 # save the latency of the perturbation for this run
                 if pert not in pert_latency.keys():
                     pert_latency[pert] = [perturbations[pert][0], [], []] # sending_tick, latency
                 
-                pert_latency[pert][1].append(mean_latency - perturbations[pert][0])
+                pert_latency[pert][1].append(mean_latency)
                 pert_latency[pert][2].append(len(perturbations[pert][1].values()))
 
         rows = []
