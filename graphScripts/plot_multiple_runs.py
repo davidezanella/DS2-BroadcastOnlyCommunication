@@ -4,6 +4,7 @@ import sys
 import argparse
 import matplotlib.pyplot as plt 
 import statistics
+from matplotlib.pyplot import figure
 
 '''
     Script used to plot the data in the csv file created via create_plots.py (run in mode (2))
@@ -21,7 +22,8 @@ def parse_arg(argv):
 def plot_latency(latencies, x, x_labels, remove_last, output_basename):
     for scenario in latencies:
         # plotting the points  
-        plt.plot(x[:-remove_last], latencies[scenario][:-remove_last], label=scenario, alpha=0.7)
+        new_x = x[:-remove_last]
+        plt.plot(new_x, latencies[scenario][:len(new_x)], label=scenario, alpha=0.7)
     
     # naming the x axis 
     plt.xlabel('Perturbation') 
@@ -57,7 +59,8 @@ def plot_latency(latencies, x, x_labels, remove_last, output_basename):
 def plot_relays_reached(relays_reached, x, x_labels, remove_last, output_basename):
     for scenario in relays_reached:
         # plotting the points  
-        plt.plot(x[:-remove_last], relays_reached[scenario][:-remove_last], label=scenario, alpha=0.7)
+        new_x = x[:-remove_last]
+        plt.plot(new_x, relays_reached[scenario][:len(new_x)], label=scenario, alpha=0.7)
     
     # naming the x axis 
     plt.xlabel('Perturbation') 
@@ -122,6 +125,9 @@ def main():
         x_labels[row['Perturbation']] = str(int(float(row['Tick']))) + "\ns0"
 
     x = list(set(x))
+       
+    # set matplotlib figure sizes
+    figure(num=None, figsize=(8, 6), dpi=300, facecolor='w', edgecolor='k')
     
     plot_latency(latencies, x, x_labels, remove_last, output_basename)
     plot_relays_reached(relays_reached, x, x_labels, remove_last, output_basename)
