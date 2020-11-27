@@ -210,8 +210,9 @@ def main():
                 
                 # save the latency of the perturbation for this run
                 if pert not in pert_latency.keys():
-                    pert_latency[pert] = [perturbations[pert][0], [], []] # sending_tick, latency
+                    pert_latency[pert] = [[], [], []] # sending_tick, latency
                 
+                pert_latency[pert][0].append(perturbations[pert][0])
                 pert_latency[pert][1].append(mean_latency)
                 pert_latency[pert][2].append(len(perturbations[pert][1].values()))
 
@@ -223,7 +224,7 @@ def main():
                     'Perturbation': str(p),
                     'Latency': str(statistics.mean(pert_latency[p][1])),
                     'Count': str(statistics.mean(pert_latency[p][2])),
-                    'Tick': pert_latency[p][0]
+                    'Tick': str(statistics.mean(pert_latency[p][0]))
                 })
 
         file_exists = path.exists(args.print_only_to)
