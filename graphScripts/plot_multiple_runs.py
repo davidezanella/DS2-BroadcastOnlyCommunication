@@ -15,19 +15,17 @@ from matplotlib.pyplot import figure
 def parse_arg(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument('--input_csv', type=str, help='Path to csv file generated via create_plots.py')
-    parser.add_argument('--remove_last', type=int, help='Number of last perturbations to avoid to plot')
+    parser.add_argument('--max_tick', type=int, help='Maximum tick to plot')
     return parser.parse_args(argv)
 
 
-def plot_latency(latencies, x, x_labels, remove_last, output_basename):
+def plot_latency(latencies, x, x_labels, output_basename):
     for scenario in latencies:
         # plotting the points  
-        new_x = x[:-remove_last]
-        plt.plot(new_x, latencies[scenario][:len(new_x)], label=scenario, alpha=0.7)
+        plt.plot(x, latencies[scenario][:len(x)], label=scenario, alpha=0.7)
     
     # naming the x axis 
-    plt.xlabel('Perturbation') 
-    x_labels = list(x_labels.values())[:-remove_last]
+    plt.xlabel('Perturbation')
     plt.xticks(range(len(x_labels)), x_labels)
     
     # naming the y axis 
@@ -56,15 +54,13 @@ def plot_latency(latencies, x, x_labels, remove_last, output_basename):
     plt.clf()
 
 
-def plot_relays_reached(relays_reached, x, x_labels, remove_last, output_basename):
+def plot_relays_reached(relays_reached, x, x_labels, output_basename):
     for scenario in relays_reached:
         # plotting the points  
-        new_x = x[:-remove_last]
-        plt.plot(new_x, relays_reached[scenario][:len(new_x)], label=scenario, alpha=0.7)
+        plt.plot(x, relays_reached[scenario][:len(x)], label=scenario, alpha=0.7)
     
     # naming the x axis 
-    plt.xlabel('Perturbation') 
-    x_labels = list(x_labels.values())[:-remove_last]
+    plt.xlabel('Perturbation')
     plt.xticks(range(len(x_labels)), x_labels)
     
     # naming the y axis 
@@ -96,7 +92,7 @@ def plot_relays_reached(relays_reached, x, x_labels, remove_last, output_basenam
 def main():
     args = parse_arg(sys.argv[1:])
     
-    remove_last = int(args.remove_last)
+    max_tick = int(args.max_tick)
     
     output_basename = str(args.input_csv)[:-4]
     
@@ -108,6 +104,8 @@ def main():
 
     # sort the values
     csv_runs = list(sorted(csv_runs, key=lambda x: (float(x['Tick']), x['Perturbation'])))
+    # remove the unwanted ticks
+    csv_runs = list(filter(lambda x: float(x['Tick']) <= max_tick, csv_runs))
 
     x_labels = {}
     x = []
@@ -122,15 +120,17 @@ def main():
         relays_reached[scenario].append(float(row['Count']))
         
         x.append(row['Perturbation'])
-        x_labels[row['Perturbation']] = str(int(float(row['Tick']))) + "\ns0"
+        station_num = row['Perturbation'][9:].split("'")[0]
+        x_labels[row['Perturbation']] = str(int(float(row['Tick']))) + "\ns" + station_num
 
     x = list(set(x))
+    x_labels = list(x_labels.values())
        
     # set matplotlib figure sizes
-    figure(num=None, figsize=(8, 6), dpi=300, facecolor='w', edgecolor='k')
+    figure(num=None, figsize=(22, 6), dpi=300, facecolor='w', edgecolor='k')
     
-    plot_latency(latencies, x, x_labels, remove_last, output_basename)
-    plot_relays_reached(relays_reached, x, x_labels, remove_last, output_basename)
+    plot_latency(latencies, x, x_labels, output_basename)
+    plot_relays_reached(relays_reached, x, x_labels, output_basename)
 
 
 if __name__ == "__main__":
