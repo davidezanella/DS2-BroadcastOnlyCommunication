@@ -25,7 +25,7 @@ def plot_latency(latencies, x, x_labels, output_basename):
         plt.plot(x, latencies[scenario][:len(x)], label=scenario, alpha=0.7)
     
     # naming the x axis 
-    plt.xlabel('Perturbation')
+    plt.xlabel('Perturbations')
     plt.xticks(range(len(x_labels)), x_labels)
     
     # naming the y axis 
@@ -60,7 +60,7 @@ def plot_relays_reached(relays_reached, x, x_labels, output_basename):
         plt.plot(x, relays_reached[scenario][:len(x)], label=scenario, alpha=0.7)
     
     # naming the x axis 
-    plt.xlabel('Perturbation')
+    plt.xlabel('Perturbations')
     plt.xticks(range(len(x_labels)), x_labels)
     
     # naming the y axis 
@@ -107,30 +107,42 @@ def main():
     # remove the unwanted ticks
     csv_runs = list(filter(lambda x: float(x['Tick']) <= max_tick, csv_runs))
 
-    perts = set()
-    x_labels = []
+    x_labels = {}
     x = []
 
     for row in csv_runs:
         scenario = row['Scenario']
-        if scenario not in latencies.keys():
-            latencies[scenario] = []
-            relays_reached[scenario] = []
-
-        latencies[scenario].append(float(row['Latency']))
-        relays_reached[scenario].append(float(row['Count']))
+        # get a list ['ref', 'Station0']
+        pert = row['Perturbation'][1:-1].split(', ')
+            
+        station_num = pert[0][8:-1]
+        ref = int(pert[1])
         
-        if row['Perturbation'] not in perts:
-            perts.add(row['Perturbation'])
+        if scenario not in latencies.keys():
+            latencies[scenario] = {}
+            relays_reached[scenario] = {}
+        if ref not in latencies[scenario]:
+            latencies[scenario][ref] = []
+            relays_reached[scenario][ref] = []
 
-            # get a list ['ref', 'Station0']
-            pert = list(reversed(row['Perturbation'][1:-1].split(', ')))
-            x.append(row['Tick'] + ' '.join(pert))
-            station_num = pert[1][8:-1]
-            x_labels.append(str(int(float(row['Tick']))) + "\ns" + station_num)
+        latencies[scenario][ref].append(float(row['Latency']))
+        relays_reached[scenario][ref].append(float(row['Count']))
+        
+        if ref not in x:
+            x.append(ref)
+            x_labels[ref] = set()
+        x_labels[ref].add(station_num)
+       
+    for scen in latencies.keys():
+        latencies[scen] = [statistics.mean(latencies[scen][ref]) for ref in latencies[scen].keys()]
+    for scen in relays_reached.keys():
+        relays_reached[scen] = [statistics.mean(relays_reached[scen][ref]) for ref in relays_reached[scen].keys()]
+    
+    x_labels = ['{}\n[s{}, ..., s{}]'.format(ref, min(x_labels[ref]), max(x_labels[ref])) for ref in x_labels.keys()]
+       
        
     # set matplotlib figure sizes
-    figure(num=None, figsize=(22, 6), dpi=300, facecolor='w', edgecolor='k')
+    figure(num=None, figsize=(10, 6), dpi=300, facecolor='w', edgecolor='k')
     
     plot_latency(latencies, x, x_labels, output_basename)
     plot_relays_reached(relays_reached, x, x_labels, output_basename)
