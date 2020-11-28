@@ -107,7 +107,8 @@ def main():
     # remove the unwanted ticks
     csv_runs = list(filter(lambda x: float(x['Tick']) <= max_tick, csv_runs))
 
-    x_labels = {}
+    perts = set()
+    x_labels = []
     x = []
 
     for row in csv_runs:
@@ -119,12 +120,14 @@ def main():
         latencies[scenario].append(float(row['Latency']))
         relays_reached[scenario].append(float(row['Count']))
         
-        x.append(row['Perturbation'])
-        station_num = row['Perturbation'][9:].split("'")[0]
-        x_labels[row['Perturbation']] = str(int(float(row['Tick']))) + "\ns" + station_num
+        if row['Perturbation'] not in perts:
+            perts.add(row['Perturbation'])
 
-    x = list(set(x))
-    x_labels = list(x_labels.values())
+            # get a list ['ref', 'Station0']
+            pert = list(reversed(row['Perturbation'][1:-1].split(', ')))
+            x.append(row['Tick'] + ' '.join(pert))
+            station_num = pert[1][8:-1]
+            x_labels.append(str(int(float(row['Tick']))) + "\ns" + station_num)
        
     # set matplotlib figure sizes
     figure(num=None, figsize=(22, 6), dpi=300, facecolor='w', edgecolor='k')
