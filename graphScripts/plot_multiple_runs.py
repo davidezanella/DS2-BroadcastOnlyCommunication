@@ -138,7 +138,12 @@ def main():
     for scen in relays_reached.keys():
         relays_reached[scen] = [statistics.mean(relays_reached[scen][ref]) for ref in relays_reached[scen].keys()]
     
-    x_labels = ['{}\n[s{}, ..., s{}]'.format(ref, min(x_labels[ref]), max(x_labels[ref])) for ref in x_labels.keys()]
+    def make_label(ref, stations):
+        if len(stations) > 1:
+            return '{}\n[s{}, ..., s{}]'.format(ref, min(x_labels[ref]), max(x_labels[ref]))
+        else:
+            return '{}\n[s{}]'.format(ref, min(x_labels[ref]))            
+    x_labels = [make_label(ref, x_labels[ref]) for ref in x_labels.keys()]
        
        
     # set matplotlib figure sizes
