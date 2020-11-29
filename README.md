@@ -10,6 +10,13 @@ Optionally, for running the plotting scripts:
 * Python 3
 
 ## Installation
+You have two ways to do it; first one:
+
+1. Download the `installer.jar` file from [this link](https://drive.google.com/file/d/15TYa1B3HanApnJTkXwoHeKTWVrQ3GNu1/view?usp=sharing)
+2. Execute it (`java -jar installer.jar`) and follow the installation wizard
+3. Run the `start_model.bat` or `start_model.command` file
+
+Second one:
 1. Clone the repository
 2. Import the project as Repast Project into Eclipse
 3. Run the simulator
@@ -38,6 +45,11 @@ Optionally, for running the plotting scripts:
 * --input_csv: path to csv file generated via create_plots.py
 
 Alternatively, if you don't generate the csv file via create_plots.py, you can create a two-columns csv, where the columns follow the pattern "Scenario","Latency"
+
+## Authors
+* **Simone Degiacomi** 211458
+* **Davide Tessarolo** 211457
+* **Davide Zanella** 211463
 
 ## Reference
 Christian F. Tschudin: Broadcast-Only Communication Model Based on Replicated Append-Only Logs, ACM SIGCOMM Computer Communication Review, Volume 49 Issue 2, April 2019
