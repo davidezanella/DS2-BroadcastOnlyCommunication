@@ -20,7 +20,7 @@ def parse_arg(argv):
 
 
 def plot_latency(latencies, x, x_labels, output_basename):
-    for scenario in latencies:
+    for scenario in sorted(latencies):
         # plotting the points  
         plt.plot(x, latencies[scenario][:len(x)], label=scenario, alpha=0.7)
     
@@ -55,7 +55,7 @@ def plot_latency(latencies, x, x_labels, output_basename):
 
 
 def plot_relays_reached(relays_reached, x, x_labels, output_basename):
-    for scenario in relays_reached:
+    for scenario in sorted(relays_reached):
         # plotting the points  
         plt.plot(x, relays_reached[scenario][:len(x)], label=scenario, alpha=0.7)
     
