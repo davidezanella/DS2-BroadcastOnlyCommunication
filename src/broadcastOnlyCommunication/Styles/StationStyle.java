@@ -12,6 +12,6 @@ public class StationStyle extends DefaultStyleOGL2D {
 	}
 
 	public VSpatial getVSpatial(Object agent, VSpatial spatial) {
-		return shapeFactory.createCircle(4, 5);
+		return shapeFactory.createCircle(10, 5);
 	}
 }

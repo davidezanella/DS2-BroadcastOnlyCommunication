@@ -12,6 +12,6 @@ public class RelayStyle extends DefaultStyleOGL2D {
 	}
 
 	public VSpatial getVSpatial(Object agent, VSpatial spatial) {
-		return shapeFactory.createCircle(4, 3);
+		return shapeFactory.createCircle(10, 3);
 	}
 }

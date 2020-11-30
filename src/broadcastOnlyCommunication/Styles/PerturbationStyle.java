@@ -12,12 +12,19 @@ public class PerturbationStyle extends DefaultStyleOGL2D {
 	@Override
 	public Color getColor(Object o) {
 		Perturbation p = (Perturbation) o;
-
+		Color color;
 		if (p.val.equals(RelayIII.ARQ_VAL)) {
-			return Color.LIGHT_GRAY;
+			color = Color.LIGHT_GRAY;
 		} else {
-			return Color.ORANGE;
+			color = Color.ORANGE;
 		}
+		
+		int alpha = 255;
+		if (p.getRadius() > 1) {
+			alpha = Math.min(255, (int)(1024 / p.getRadius()));
+		}
+		
+		return new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
 	}
 
 	public VSpatial getVSpatial(Object agent, VSpatial spatial) {
